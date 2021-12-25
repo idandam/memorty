@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import "./components/Cards/Card";
+import "./App.css";
+import Cards from "./components/Cards/Cards";
+import Card from "./components/Cards/Card";
+import Progress from "./components/Progress/Progress";
+
+const cards = [
+  { url: "129.jpeg", name: 0 },
+  { url: "129.jpeg", name: 1 },
+  { url: "129.jpeg", name: 2 },
+  { url: "129.jpeg", name: 3 },
+];
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Progress />
+      <Cards>
+        {cards.map((card) => (
+          <Card key={card.name} name={card.name} url={card.url} />
+        ))}
+      </Cards>
+    </>
   );
 }
 
