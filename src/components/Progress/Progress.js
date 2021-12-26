@@ -5,9 +5,9 @@ import styles from "./Progress.module.css";
 const Progress = (props) => {
   return (
     <div className={styles.progress}>
-      <ProgressElement name="Current Score" value={1} />
-      <ProgressElement name="Level" value={2} />
-      <ProgressElement name="Best Score" value={4} />
+      <ProgressElement name="Current Score" value={props.currScore} />
+      <ProgressElement name="Level" value={props.level} />
+      <ProgressElement name="Best Score" value={props.bestScore} />
     </div>
   );
 };
