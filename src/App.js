@@ -16,6 +16,14 @@ cards.forEach((card) => {
   clicked[card.name] = false;
 });
 
+// Fisher-Yates shuffle
+const shuffle = (cards) => {
+  for (let i = cards.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+};
+
 const initalState = { clicked, currScore: 0, bestScore: 0, level: 1 };
 
 const reducer = (prevState, action) => {
@@ -30,7 +38,12 @@ const reducer = (prevState, action) => {
       if (!prevState.clicked[action.id]) {
         currScore = prevState.currScore + 1;
         if (currScore === cards.length) {
-          level = prevState.level + 1;
+          if (level < 3) {
+            level = prevState.level + 1;
+            // TODO handle fetch more cards
+          } else {
+            // TODO handle pass all levels
+          }
         }
         if (currScore > prevState.bestScore) {
           bestScore = currScore;
@@ -42,6 +55,7 @@ const reducer = (prevState, action) => {
         level = prevState.level - 1;
         // remove some photos
       }
+      shuffle(cards);
       return { clicked, currScore, bestScore, level };
     }
     default:
