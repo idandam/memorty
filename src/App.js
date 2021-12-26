@@ -38,7 +38,7 @@ const reducer = (prevState, action) => {
         clicked = { ...clicked };
         clicked[action.id] = true;
         // handle miss
-      } else if (prevState.level > 0) {
+      } else if (prevState.level > 1) {
         level = prevState.level - 1;
         // remove some photos
       }
