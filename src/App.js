@@ -68,7 +68,7 @@ const initalState = {
   clicked,
   currScore: 0,
   bestScore: 0,
-  level: 1,
+  level: { val: 1 },
 };
 
 const reducer = (prevState, action) => {
@@ -80,22 +80,23 @@ const reducer = (prevState, action) => {
 
   switch (action.type) {
     case "NEW_CARDS":
-      break;
+      shuffle(action.data);
+      return { cards: action.data, clicked, currScore, bestScore, level };
     case "CARD_CLICK": {
       // handle hit
       if (!prevState.clicked[action.id]) {
         clicked[action.id] = true;
         currScore = currScore + 1;
         //TODO change this
-        if (currScore === getBound(level)) {
-          if (level < 3) {
+        if (currScore === getBound(level.val)) {
+          if (level.val < 3) {
             resetClicks(clicked);
-            level = level + 1;
+            level = { val: level.val + 1 };
             // add cards
-            let numOfCards = cards.length;
-            for (let i = 0; i < 4; i++) {
-              cards.push(dataSource[i + numOfCards]);
-            }
+            // let numOfCards = cards.length;
+            // for (let i = 0; i < 4; i++) {
+            //   cards.push(dataSource[i + numOfCards]);
+            // }
           } else {
             // TODO handle pass all levels
           }
@@ -109,9 +110,8 @@ const reducer = (prevState, action) => {
       } else {
         resetClicks(clicked);
         // start new
-        cards = dataSource.slice(0, 4);
-        shuffle(cards);
-        level = 1;
+        // shuffle(cards);
+        level = { val: 1 };
         currScore = 0;
       }
       return { cards, clicked, currScore, bestScore, level };
@@ -126,8 +126,9 @@ function App() {
 
   useEffect(() => {
     let data = fetch();
+    data = data.slice(0, state.level.val * 4);
     dispatch({ type: "NEW_CARDS", data });
-  }, [state.cards]);
+  }, [state.level]);
 
   const cardClickHandler = (id) => {
     dispatch({ type: "CARD_CLICK", id });
@@ -137,7 +138,7 @@ function App() {
     <>
       <Progress
         currScore={state.currScore}
-        level={state.level}
+        level={state.level.val}
         bestScore={state.bestScore}
       />
       <Cards cards={state.cards} onCardClick={cardClickHandler} />
