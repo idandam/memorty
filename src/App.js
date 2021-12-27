@@ -1,9 +1,12 @@
 import "./components/Cards/Card";
-import "./App.css";
 import Cards from "./components/Cards/Cards";
 import Progress from "./components/Progress/Progress";
 import { useReducer } from "react";
 import { useEffect } from "react";
+
+import "./App.css";
+
+import shuffle from "./utils/shuffle";
 
 /*
 const fetchStaticImg = () => {
@@ -35,23 +38,15 @@ const fetch = () => {
   return dataSource;
 };
 
-const resetClicks = (clicked) => {
-  dataSource.forEach((card) => {
+const resetClicks = (cards) => {
+  let clicked = {};
+  cards.forEach((card) => {
     clicked[card.name] = false;
   });
-};
-const clicked = {};
-resetClicks(clicked);
-
-// Fisher-Yates shuffle
-const shuffle = (elments) => {
-  for (let i = elments.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    [elments[i], elments[j]] = [elments[j], elments[i]];
-  }
+  return clicked;
 };
 
-const getBound = (level) => {
+const nextLevelIndicator = (level) => {
   switch (level) {
     case 1:
       return 4;
@@ -65,7 +60,7 @@ const getBound = (level) => {
 };
 const initalState = {
   cards: [dataSource[0], dataSource[1], dataSource[2], dataSource[3]],
-  clicked,
+  clicked: {},
   currScore: 0,
   bestScore: 0,
   level: { val: 1 },
@@ -81,25 +76,27 @@ const reducer = (prevState, action) => {
   switch (action.type) {
     case "NEW_CARDS":
       shuffle(action.data);
-      return { cards: action.data, clicked, currScore, bestScore, level };
+      return {
+        cards: action.data,
+        clicked: resetClicks(action.data),
+        currScore,
+        bestScore,
+        level,
+      };
     case "CARD_CLICK": {
       // handle hit
       if (!prevState.clicked[action.id]) {
         clicked[action.id] = true;
         currScore = currScore + 1;
-        //TODO change this
-        if (currScore === getBound(level.val)) {
+        // If should play in the next level
+        if (currScore === nextLevelIndicator(level.val)) {
+          // if didn't reach max level
           if (level.val < 3) {
-            resetClicks(clicked);
             level = { val: level.val + 1 };
-            // add cards
-            // let numOfCards = cards.length;
-            // for (let i = 0; i < 4; i++) {
-            //   cards.push(dataSource[i + numOfCards]);
-            // }
           } else {
             // TODO handle pass all levels
           }
+          // shuffle existing cards
         } else {
           shuffle(cards);
         }
@@ -108,7 +105,6 @@ const reducer = (prevState, action) => {
         }
         // handle miss
       } else {
-        resetClicks(clicked);
         // start new
         // shuffle(cards);
         level = { val: 1 };
