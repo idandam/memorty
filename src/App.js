@@ -3,60 +3,118 @@ import "./App.css";
 import Cards from "./components/Cards/Cards";
 import Progress from "./components/Progress/Progress";
 import { useReducer } from "react";
+import { useEffect } from "react";
 
-const cards = [
-  { url: "129.jpeg", name: 0 },
-  { url: "129.jpeg", name: 1 },
-  { url: "129.jpeg", name: 2 },
-  { url: "129.jpeg", name: 3 },
-];
+/*
+const fetchStaticImg = () => {
+  const idsArray = [];
+for (let i = 0; i < 16; i++) {
+  idsArray.push(i);
+}
+const idsString = idsArray.join(",");
 
+fetch(`https://rickandmortyapi.com/api/character/${idsString}`)
+  .then((res) => res.json())
+  .then((characters) => {
+    for (let character of characters) {
+      let img = document.createElement("img");
+      img.src = character.image;
+      img.alt = "sometext";
+      document.body.prepend(img);
+    }
+  });
+}
+*/
+
+const dataSource = [];
+for (let i = 0; i < 24; i++) {
+  dataSource.push({ name: i + "" });
+}
+
+const fetch = () => {
+  return dataSource;
+};
+
+const resetClicks = (clicked) => {
+  dataSource.forEach((card) => {
+    clicked[card.name] = false;
+  });
+};
 const clicked = {};
-cards.forEach((card) => {
-  clicked[card.name] = false;
-});
+resetClicks(clicked);
 
 // Fisher-Yates shuffle
-const shuffle = (cards) => {
-  for (let i = cards.length - 1; i > 0; i--) {
+const shuffle = (elments) => {
+  for (let i = elments.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
-    [cards[i], cards[j]] = [cards[j], cards[i]];
+    [elments[i], elments[j]] = [elments[j], elments[i]];
   }
 };
 
-const initalState = { clicked, currScore: 0, bestScore: 0, level: 1 };
+const getBound = (level) => {
+  switch (level) {
+    case 1:
+      return 4;
+    case 2:
+      return 12;
+    case 3:
+      return 24;
+    default:
+      throw new Error("Non-valid level: " + level);
+  }
+};
+const initalState = {
+  cards: [dataSource[0], dataSource[1], dataSource[2], dataSource[3]],
+  clicked,
+  currScore: 0,
+  bestScore: 0,
+  level: 1,
+};
 
 const reducer = (prevState, action) => {
-  let currScore = 0,
-    level = 1,
-    clicked = prevState.clicked,
-    bestScore = prevState.bestScore;
+  let currScore = prevState.currScore,
+    level = prevState.level,
+    clicked = { ...prevState.clicked },
+    bestScore = prevState.bestScore,
+    cards = [...prevState.cards];
 
   switch (action.type) {
+    case "NEW_CARDS":
+      break;
     case "CARD_CLICK": {
       // handle hit
       if (!prevState.clicked[action.id]) {
-        currScore = prevState.currScore + 1;
-        if (currScore === cards.length) {
+        clicked[action.id] = true;
+        currScore = currScore + 1;
+        //TODO change this
+        if (currScore === getBound(level)) {
           if (level < 3) {
-            level = prevState.level + 1;
-            // TODO handle fetch more cards
+            resetClicks(clicked);
+            level = level + 1;
+            // add cards
+            let numOfCards = cards.length;
+            for (let i = 0; i < 4; i++) {
+              cards.push(dataSource[i + numOfCards]);
+            }
           } else {
             // TODO handle pass all levels
           }
+        } else {
+          shuffle(cards);
         }
-        if (currScore > prevState.bestScore) {
+        if (currScore > bestScore) {
           bestScore = currScore;
         }
-        clicked = { ...clicked };
-        clicked[action.id] = true;
         // handle miss
-      } else if (prevState.level > 1) {
-        level = prevState.level - 1;
-        // remove some photos
+      } else {
+        resetClicks(clicked);
+        // start new
+        cards = dataSource.slice(0, 4);
+        shuffle(cards);
+        level = 1;
+        currScore = 0;
       }
-      shuffle(cards);
-      return { clicked, currScore, bestScore, level };
+      return { cards, clicked, currScore, bestScore, level };
     }
     default:
       throw new Error("Unexpected action after dispatch");
@@ -65,6 +123,11 @@ const reducer = (prevState, action) => {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initalState);
+
+  useEffect(() => {
+    let data = fetch();
+    dispatch({ type: "NEW_CARDS", data });
+  }, [state.cards]);
 
   const cardClickHandler = (id) => {
     dispatch({ type: "CARD_CLICK", id });
@@ -77,7 +140,7 @@ function App() {
         level={state.level}
         bestScore={state.bestScore}
       />
-      <Cards cards={cards} onCardClick={cardClickHandler} />
+      <Cards cards={state.cards} onCardClick={cardClickHandler} />
     </>
   );
 }

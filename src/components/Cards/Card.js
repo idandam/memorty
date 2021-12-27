@@ -1,12 +1,11 @@
-import testImage from "../../img/129.jpeg";
 import styles from "./Card.module.css";
 
 const Card = (props) => {
   return (
     <figure id={props.id} className={styles["card-container"]}>
       <img
-        src={testImage}
-        className={styles["card-image"]}
+        src="#"
+        // className={styles["card-image"]}
         alt="Rick and Morty character"
       ></img>
       <figcaption className={styles["card-name"]}>{props.name}</figcaption>
