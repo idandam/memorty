@@ -2,8 +2,8 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
-  gap: 0.5rem;
-  width: 70rem;
-  margin: 2rem auto;
-  border: 2px solid black;
+  row-gap: 2rem;
+  padding: 2rem;
+  margin: 2rem auto 0 auto;
+  max-width: 65rem;
 }

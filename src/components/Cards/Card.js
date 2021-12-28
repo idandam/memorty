@@ -1,10 +1,13 @@
 import styles from "./Card.module.css";
 
+import img129 from "../../img/129.jpeg";
+
 const Card = (props) => {
   return (
-    <figure id={props.id} className={styles["card-container"]}>
+    <figure id={props.id} className={styles["card-box"]}>
       <img
-        src="#"
+        className={styles["card-image"]}
+        src={img129}
         // className={styles["card-image"]}
         alt="Rick and Morty character"
       ></img>
