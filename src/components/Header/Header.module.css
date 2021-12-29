@@ -14,8 +14,10 @@ logo-font: #e6ebed
 .header {
   display: flex;
   align-items: center;
+  width: 100%;
   padding: 0.8rem 3.2rem;
   background-image: linear-gradient(to top right, #01313f, #1a4a59);
+  font-size: 2.4rem;
 }
 
 .logo-box {
@@ -28,6 +30,5 @@ logo-font: #e6ebed
 }
 
 .logo-text {
-  font-size: 2.4rem;
   color: #e6ebed;
 }

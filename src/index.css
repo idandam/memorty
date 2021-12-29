@@ -16,12 +16,32 @@ body {
 }
 
 #root {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   min-height: 100vh;
 }
 
 img {
   image-rendering: -webkit-optimize-contrast;
+}
+
+.loader {
+  border: 1.6rem solid #f3f3f3;
+  border-top: 1.6rem solid #013646;
+  border-radius: 50%;
+  width: 12rem;
+  height: 12rem;
+  margin: 0 auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

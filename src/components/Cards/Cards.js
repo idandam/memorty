@@ -14,22 +14,29 @@ const Cards = (props) => {
     }
   };
 
-  let gridCol = styles["grid__4-col"];
+  // let gridCol;
 
-  if (props.level === 2) {
-    gridCol = styles["grid__8-col"];
-  } else if (props.level === 3) {
-    gridCol = styles["grid__6-col"];
-  }
+  // switch (props.level) {
+  //   case 1:
+  //     gridCol = styles["grid__4-col"];
+  //     break;
+  //   case 3:
+  //   case 2:
+  //   case 4:
+  //     gridCol = styles["grid__8-col"];
+  //     break;
+  //   default:
+  //     throw new Error("Invalid level");
+  // }
 
   return (
-    <div onClick={clickHandler} className={`${styles.grid} ${gridCol}`}>
+    <div onClick={clickHandler} className={`${styles.grid}`}>
       {props.cards.map((card) => (
         <Card
-          key={card.name}
-          id={card.name}
+          key={card.id}
+          id={card.id}
           name={card.name}
-          url={card.url}
+          src={card.image}
           onCardClick={props.onCardClick}
         />
       ))}

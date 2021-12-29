@@ -1,41 +1,11 @@
 import Cards from "./components/Cards/Cards";
 import shuffle from "./utils/shuffle";
+import uniqueNumbers from "./utils/uniqueNumbers";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { useEffect } from "react";
 import "./App.css";
-
-/*
-const fetchStaticImg = () => {
-  const idsArray = [];
-for (let i = 0; i < 16; i++) {
-  idsArray.push(i);
-}
-const idsString = idsArray.join(",");
-
-fetch(`https://rickandmortyapi.com/api/character/${idsString}`)
-  .then((res) => res.json())
-  .then((characters) => {
-    for (let character of characters) {
-      let img = document.createElement("img");
-      img.src = character.image;
-      img.alt = "sometext";
-      document.body.prepend(img);
-    }
-  });
-}
-*/
-
-const dataSource = [];
-for (let i = 0; i < 24; i++) {
-  dataSource.push({ name: i + "" });
-}
-
-const fetch = () => {
-  return dataSource;
-};
 
 const resetClicks = (cards) => {
   let clicked = {};
@@ -46,19 +16,14 @@ const resetClicks = (cards) => {
 };
 
 const nextLevelIndicator = (level) => {
-  switch (level) {
-    case 1:
-      return 4;
-    case 2:
-      return 12;
-    case 3:
-      return 24;
-    default:
-      throw new Error("Non-valid level: " + level);
+  if (1 <= level <= 4) {
+    return 2 * level * (level + 1);
   }
+
+  throw new Error("Non-valid level: " + level);
 };
 const initalState = {
-  cards: [dataSource[0], dataSource[1], dataSource[2], dataSource[3]],
+  cards: [],
   clicked: {},
   currScore: 0,
   bestScore: 0,
@@ -74,9 +39,9 @@ const reducer = (prevState, action) => {
 
   switch (action.type) {
     case "NEW_CARDS":
-      shuffle(action.data);
-      cards = action.data;
-      clicked = resetClicks(action.data);
+      shuffle(action.cards);
+      cards = action.cards;
+      clicked = resetClicks(action.cards);
       break;
 
     case "HIT":
@@ -85,14 +50,14 @@ const reducer = (prevState, action) => {
       // If should play in the next level
       if (currScore === nextLevelIndicator(level.val)) {
         // if didn't reach max level
-        if (level.val < 3) {
+        if (level.val < 4) {
           level = { val: level.val + 1 };
         } else {
           // TODO handle pass all levels
         }
         // shuffle existing cards
       } else {
-        shuffle(cards);
+        //shuffle(cards);
       }
       if (currScore > bestScore) {
         bestScore = currScore;
@@ -113,12 +78,36 @@ const reducer = (prevState, action) => {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initalState);
+  const [characterCount, setCharacterCount] = useState(826);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // useEffect(() => {
+  //   fetch("https://rickandmortyapi.com/api/character")
+  //     .then((response) => response.json())
+  //     .then((allCharacters) => setCharacterCount(allCharacters.info.count))
+  //     .catch(console.log("ERROR fetching number of character"));
+  // }, []);
 
   useEffect(() => {
-    let data = fetch();
-    data = data.slice(0, state.level.val * 4);
-    dispatch({ type: "NEW_CARDS", data });
-  }, [state.level]);
+    setIsLoading(true);
+    const characterIds = uniqueNumbers(state.level.val * 4, characterCount);
+    const cards = [];
+    fetch(`https://rickandmortyapi.com/api/character/${characterIds.join(",")}`)
+      .then((response) => response.json())
+      .then((characters) => {
+        characters.forEach((character) =>
+          cards.push({
+            id: character.id,
+            name: character.name,
+            image: character.image,
+            status: character.status,
+            species: character.species,
+          })
+        );
+        dispatch({ type: "NEW_CARDS", cards });
+        setIsLoading(false);
+      });
+  }, [state.level, characterCount]);
 
   const cardClickHandler = (id) => {
     if (state.clicked[id]) {
@@ -135,11 +124,14 @@ function App() {
         level={state.level.val}
         bestScore={state.bestScore}
       />
-      <Cards
-        cards={state.cards}
-        level={state.level.val}
-        onCardClick={cardClickHandler}
-      />
+      {!isLoading && (
+        <Cards
+          cards={state.cards}
+          level={state.level.val}
+          onCardClick={cardClickHandler}
+        />
+      )}
+      {isLoading && <div className="loader" />}
       <Footer />
     </>
   );
