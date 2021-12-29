@@ -13,8 +13,17 @@ const Cards = (props) => {
       }
     }
   };
+
+  let gridCol = styles["grid__4-col"];
+
+  if (props.level === 2) {
+    gridCol = styles["grid__8-col"];
+  } else if (props.level === 3) {
+    gridCol = styles["grid__6-col"];
+  }
+
   return (
-    <div onClick={clickHandler} className={styles.grid}>
+    <div onClick={clickHandler} className={`${styles.grid} ${gridCol}`}>
       {props.cards.map((card) => (
         <Card
           key={card.name}

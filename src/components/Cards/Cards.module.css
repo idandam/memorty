@@ -1,9 +1,21 @@
 .grid {
   display: grid;
+  gap: 1.6rem;
+  padding: 2.4rem 1.8rem;
+  margin: 0 auto;
+}
+
+.grid__4-col {
   grid-template-columns: repeat(4, 1fr);
-  justify-items: center;
-  row-gap: 2rem;
-  padding: 2rem;
-  margin: 2rem auto 0 auto;
   max-width: 65rem;
+}
+
+.grid__6-col {
+  grid-template-columns: repeat(6, 1fr);
+  max-width: 90rem;
+}
+
+.grid__8-col {
+  grid-template-columns: repeat(8, 1fr);
+  max-width: 120rem;
 }

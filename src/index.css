@@ -8,8 +8,20 @@
 
 html {
   font-size: 62.5%;
+  font-family: sans-serif;
 }
 
 body {
   background-color: #fff;
+}
+
+#root {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-items: center;
+  min-height: 100vh;
+}
+
+img {
+  image-rendering: -webkit-optimize-contrast;
 }

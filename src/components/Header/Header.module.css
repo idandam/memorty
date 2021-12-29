@@ -1,0 +1,33 @@
+/*
+COLORS:
+-----------
+
+Light blue : #1a4a59
+Medium blue : #013646
+Dark blue : #01313f
+
+logo-font: #e6ebed
+
+
+*/
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 3.2rem;
+  background-image: linear-gradient(to top right, #01313f, #1a4a59);
+}
+
+.logo-box {
+  display: flex;
+  gap: 1.6rem;
+  align-items: center;
+}
+.logo {
+  height: 7rem;
+}
+
+.logo-text {
+  font-size: 2.4rem;
+  color: #e6ebed;
+}

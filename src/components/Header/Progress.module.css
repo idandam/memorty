@@ -1,0 +1,5 @@
+.progress {
+  display: flex;
+  gap: 3.2rem;
+  margin: 0 0 0 auto;
+}

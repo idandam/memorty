@@ -1,12 +1,11 @@
-import "./components/Cards/Card";
 import Cards from "./components/Cards/Cards";
-import Progress from "./components/Progress/Progress";
+import shuffle from "./utils/shuffle";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+
 import { useReducer } from "react";
 import { useEffect } from "react";
-
 import "./App.css";
-
-import shuffle from "./utils/shuffle";
 
 /*
 const fetchStaticImg = () => {
@@ -76,45 +75,40 @@ const reducer = (prevState, action) => {
   switch (action.type) {
     case "NEW_CARDS":
       shuffle(action.data);
-      return {
-        cards: action.data,
-        clicked: resetClicks(action.data),
-        currScore,
-        bestScore,
-        level,
-      };
-    case "CARD_CLICK": {
-      // handle hit
-      if (!prevState.clicked[action.id]) {
-        clicked[action.id] = true;
-        currScore = currScore + 1;
-        // If should play in the next level
-        if (currScore === nextLevelIndicator(level.val)) {
-          // if didn't reach max level
-          if (level.val < 3) {
-            level = { val: level.val + 1 };
-          } else {
-            // TODO handle pass all levels
-          }
-          // shuffle existing cards
+      cards = action.data;
+      clicked = resetClicks(action.data);
+      break;
+
+    case "HIT":
+      if (!prevState.clicked[action.id]) clicked[action.id] = true;
+      currScore = currScore + 1;
+      // If should play in the next level
+      if (currScore === nextLevelIndicator(level.val)) {
+        // if didn't reach max level
+        if (level.val < 3) {
+          level = { val: level.val + 1 };
         } else {
-          shuffle(cards);
+          // TODO handle pass all levels
         }
-        if (currScore > bestScore) {
-          bestScore = currScore;
-        }
-        // handle miss
+        // shuffle existing cards
       } else {
-        // start new
-        // shuffle(cards);
-        level = { val: 1 };
-        currScore = 0;
+        shuffle(cards);
       }
-      return { cards, clicked, currScore, bestScore, level };
-    }
+      if (currScore > bestScore) {
+        bestScore = currScore;
+      }
+      break;
+
+    case "MISS":
+      // start new
+      // shuffle(cards);
+      level = { val: 1 };
+      currScore = 0;
+      break;
     default:
       throw new Error("Unexpected action after dispatch");
   }
+  return { cards, clicked, currScore, bestScore, level };
 };
 
 function App() {
@@ -127,17 +121,26 @@ function App() {
   }, [state.level]);
 
   const cardClickHandler = (id) => {
-    dispatch({ type: "CARD_CLICK", id });
+    if (state.clicked[id]) {
+      dispatch({ type: "MISS", id });
+    } else {
+      dispatch({ type: "HIT", id });
+    }
   };
 
   return (
     <>
-      <Progress
+      <Header
         currScore={state.currScore}
         level={state.level.val}
         bestScore={state.bestScore}
       />
-      <Cards cards={state.cards} onCardClick={cardClickHandler} />
+      <Cards
+        cards={state.cards}
+        level={state.level.val}
+        onCardClick={cardClickHandler}
+      />
+      <Footer />
     </>
   );
 }

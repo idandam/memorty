@@ -6,12 +6,13 @@
 }
 
 .name {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 600;
+  color: #e6ebed;
 }
 
 .value {
-  font-size: 1.2rem;
+  font-size: 2.4rem;
   font-weight: 600;
-  color: blueviolet;
+  color: #fa7c6d;
 }
