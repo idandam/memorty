@@ -35,7 +35,7 @@ const reducer = (prevState, action) => {
     level = prevState.level,
     clicked = { ...prevState.clicked },
     bestScore = prevState.bestScore,
-    cards = [...prevState.cards];
+    cards = prevState.cards;
 
   switch (action.type) {
     case "NEW_CARDS":
@@ -57,7 +57,7 @@ const reducer = (prevState, action) => {
         }
         // shuffle existing cards
       } else {
-        //shuffle(cards);
+        shuffle(cards);
       }
       if (currScore > bestScore) {
         bestScore = currScore;

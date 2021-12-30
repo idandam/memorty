@@ -17,7 +17,7 @@
 
 .card-box:hover {
   transform: translateY(-0.7rem) scale(1.03);
-  box-shadow: 0 1.8rem 7rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1.6rem 2.5rem rgba(0, 0, 0, 0.15);
 }
 
 .card-image {

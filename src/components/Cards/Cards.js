@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Card from "./Card";
 
 import styles from "./Cards.module.css";
@@ -13,32 +14,10 @@ const Cards = (props) => {
       }
     }
   };
-
-  // let gridCol;
-
-  // switch (props.level) {
-  //   case 1:
-  //     gridCol = styles["grid__4-col"];
-  //     break;
-  //   case 3:
-  //   case 2:
-  //   case 4:
-  //     gridCol = styles["grid__8-col"];
-  //     break;
-  //   default:
-  //     throw new Error("Invalid level");
-  // }
-
   return (
-    <div onClick={clickHandler} className={`${styles.grid}`}>
+    <div onClick={clickHandler} className={styles.grid}>
       {props.cards.map((card) => (
-        <Card
-          key={card.id}
-          id={card.id}
-          name={card.name}
-          src={card.image}
-          onCardClick={props.onCardClick}
-        />
+        <Card key={card.id} id={card.id} name={card.name} src={card.image} />
       ))}
     </div>
   );

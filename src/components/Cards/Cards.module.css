@@ -5,4 +5,16 @@
   flex-wrap: wrap;
   max-width: 120rem;
   padding: 2.4rem;
+  animation: caleAndBlur 1s ease-out;
+}
+
+@keyframes caleAndBlur {
+  0% {
+    transform: scale(0);
+    filter: blur(4px);
+  }
+  100% {
+    filter: blur(0);
+    transform: scale(1);
+  }
 }
