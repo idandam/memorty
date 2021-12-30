@@ -3,8 +3,12 @@ import shuffle from "./utils/shuffle";
 import uniqueNumbers from "./utils/uniqueNumbers";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+
 import { useReducer, useState } from "react";
 import { useEffect } from "react";
+
+import Modal from "react-bootstrap/Modal";
+
 import "./App.css";
 
 const resetClicks = (cards) => {
@@ -21,6 +25,10 @@ const nextLevelIndicator = (level) => {
   }
 
   throw new Error("Non-valid level: " + level);
+};
+
+const isWin = (level, currScore) => {
+  return level === 4 && currScore === 2 * level * (level + 1);
 };
 const initalState = {
   cards: [],
@@ -45,9 +53,9 @@ const reducer = (prevState, action) => {
       break;
 
     case "HIT":
-      if (!prevState.clicked[action.id]) clicked[action.id] = true;
+      clicked[action.id] = true;
       currScore = currScore + 1;
-      // If should play in the next level
+      // If reached to next level
       if (currScore === nextLevelIndicator(level.val)) {
         // if didn't reach max level
         if (level.val < 4) {
@@ -65,11 +73,11 @@ const reducer = (prevState, action) => {
       break;
 
     case "MISS":
-      // start new
-      // shuffle(cards);
+    case "NEW_GAME":
       level = { val: 1 };
       currScore = 0;
       break;
+
     default:
       throw new Error("Unexpected action after dispatch");
   }
@@ -78,17 +86,21 @@ const reducer = (prevState, action) => {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initalState);
-  const [characterCount, setCharacterCount] = useState(826);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // useEffect(() => {
-  //   fetch("https://rickandmortyapi.com/api/character")
-  //     .then((response) => response.json())
-  //     .then((allCharacters) => setCharacterCount(allCharacters.info.count))
-  //     .catch(console.log("ERROR fetching number of character"));
-  // }, []);
+  const [characterCount, setCharacterCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    fetch("https://rickandmortyapi.com/api/character")
+      .then((response) => response.json())
+      .then((allCharacters) => setCharacterCount(allCharacters.info.count))
+      .catch(console.log("ERROR fetching number of character"));
+  }, []);
+
+  useEffect(() => {
+    if (!characterCount) {
+      return;
+    }
+
     setIsLoading(true);
     const characterIds = uniqueNumbers(state.level.val * 4, characterCount);
     const cards = [];
@@ -113,12 +125,15 @@ function App() {
     if (state.clicked[id]) {
       dispatch({ type: "MISS", id });
     } else {
-      dispatch({ type: "HIT", id });
+      if (isWin(state.level.val, state.currScore)) {
+      } else {
+        dispatch({ type: "HIT", id });
+      }
     }
   };
 
   return (
-    <>
+    <div className="container">
       <Header
         currScore={state.currScore}
         level={state.level.val}
@@ -133,7 +148,7 @@ function App() {
       )}
       {isLoading && <div className="loader" />}
       <Footer />
-    </>
+    </div>
   );
 }
 

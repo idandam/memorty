@@ -5,10 +5,10 @@
   flex-wrap: wrap;
   max-width: 120rem;
   padding: 2.4rem;
-  animation: caleAndBlur 1s ease-out;
+  animation: scaleAndBlur 1s ease-out;
 }
 
-@keyframes caleAndBlur {
+@keyframes scaleAndBlur {
   0% {
     transform: scale(0);
     filter: blur(4px);

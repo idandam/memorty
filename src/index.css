@@ -15,13 +15,7 @@ body {
   background-color: #fff;
 }
 
-#root {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 100vh;
-}
+
 
 img {
   image-rendering: -webkit-optimize-contrast;
