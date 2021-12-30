@@ -15,7 +15,14 @@
   transition: all 0.3s;
 }
 
-.card-box:hover {
+.border {
+  box-shadow: 0 0 0.8rem 0.1rem #fa7c6d;
+  animation: shakeShadow 0.4s ease-in;
+}
+.default-cursor {
+  cursor: default;
+}
+.card-box:hover:not(.default-cursor) {
   transform: translateY(-0.7rem) scale(1.03);
   box-shadow: 0 1.6rem 2.5rem rgba(0, 0, 0, 0.15);
 }
@@ -33,4 +40,28 @@
 .card-btn {
   padding: 0.1rem;
   background-color: green;
+}
+
+@keyframes shakeShadow {
+  0% {
+    transform: translateX(-1rem);
+    box-shadow: none;
+  }
+
+  25% {
+    transform: translateX(1rem);
+  }
+
+  50% {
+    transform: translateX(-1rem);
+  }
+
+  75% {
+    transform: translateX(1rem);
+  }
+
+  100% {
+    translatex: (0);
+    box-shadow: 0 0 0.8rem 0.1rem #fa7c6d;
+  }
 }

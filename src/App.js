@@ -3,7 +3,7 @@ import shuffle from "./utils/shuffle";
 import uniqueNumbers from "./utils/uniqueNumbers";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-import Win from "./components/Win/Win";
+import Dialog from "./components/Dialog/Dialog";
 
 import { useReducer, useState } from "react";
 import { useEffect } from "react";
@@ -16,7 +16,7 @@ const LEVELS = 1,
 const resetClicks = (cards) => {
   let clicked = {};
   cards.forEach((card) => {
-    clicked[card.name] = false;
+    clicked[card.id] = false;
   });
   return clicked;
 };
@@ -32,6 +32,7 @@ const nextLevelIndicator = (level) => {
 const isWin = (level, currScore) => {
   return level === LEVELS && currScore === 2 * level * (level + 1) - 1;
 };
+
 const initalState = {
   cards: [],
   clicked: {},
@@ -39,6 +40,7 @@ const initalState = {
   bestScore: 0,
   level: { val: 1 },
   isWin: false,
+  isLose: false,
 };
 
 const reducer = (prevState, action) => {
@@ -47,7 +49,8 @@ const reducer = (prevState, action) => {
     clicked = { ...prevState.clicked },
     bestScore = prevState.bestScore,
     cards = prevState.cards,
-    isWin = prevState.isWin;
+    isWin = prevState.isWin,
+    isLose = prevState.isLose;
 
   switch (action.type) {
     case "NEW_CARDS":
@@ -76,20 +79,23 @@ const reducer = (prevState, action) => {
       break;
 
     case "MISS":
-    case "NEW_GAME":
-      level = { val: 1 };
-      currScore = 0;
-      isWin = false;
+      isLose = true;
       break;
 
     case "WIN":
       isWin = true;
       break;
 
+    case "NEW_GAME":
+      level = { val: 1 };
+      currScore = 0;
+      isWin = isLose = false;
+      break;
+
     default:
       throw new Error("Unexpected action after dispatch");
   }
-  return { cards, clicked, currScore, bestScore, level, isWin };
+  return { cards, clicked, currScore, bestScore, level, isWin, isLose };
 };
 
 function App() {
@@ -101,7 +107,7 @@ function App() {
     fetch("https://rickandmortyapi.com/api/character")
       .then((response) => response.json())
       .then((allCharacters) => setCharacterCount(allCharacters.info.count))
-      .catch(console.log("ERROR fetching number of character"));
+      .catch((err) => console.log("ERROR fetching number of character"));
   }, []);
 
   useEffect(() => {
@@ -154,16 +160,40 @@ function App() {
         currScore={state.currScore}
         level={state.level.val}
         bestScore={state.bestScore}
+        isLose={state.isLose}
       />
-      {!loading && !state.isWin && (
+      {!loading && !state.isWin && !state.isLose && (
         <Cards
           cards={state.cards}
           level={state.level.val}
           onCardClick={cardClickHandler}
         />
       )}
+      {!loading && state.isLose && (
+        <Cards
+          cards={state.cards}
+          level={state.level.val}
+          clicked={Object.getOwnPropertyNames(state.clicked).filter(
+            (id) => !state.clicked[id]
+          )}
+        />
+      )}
+
       {loading && <div className="loader" />}
-      {state.isWin && <Win onNewGame={newGameHandler} />}
+      {state.isWin && (
+        <Dialog
+          title="Win!"
+          body={
+            <>
+              Great job!.
+              <br />
+              You've finished all the levels.
+            </>
+          }
+          actionText="PLAY AGAIN"
+          onNewGame={newGameHandler}
+        />
+      )}
       <Footer />
     </div>
   );

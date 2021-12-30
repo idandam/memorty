@@ -5,6 +5,9 @@
   flex-wrap: wrap;
   max-width: 120rem;
   padding: 2.4rem;
+}
+
+.animate{
   animation: scaleAndBlur 1s ease-out;
 }
 

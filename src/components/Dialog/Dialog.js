@@ -1,16 +1,13 @@
-import styles from "./Win.module.css";
+import styles from "./Dialog.module.css";
 
 const Win = (props) => {
   return (
     <div className={styles.dialog}>
-      <header className={styles.header}>Win!</header>
-      <p className={styles.body}>
-        Great job!.
-        <br /> You've finished all the levels.
-      </p>
+      <header className={styles.header}>{props.title}</header>
+      <p className={styles.body}>{props.body}</p>
       <footer className={styles.footer}>
         <button onClick={props.onNewGame} className={styles.btn}>
-          PLAY AGAIN
+          {props.actionText}
         </button>
       </footer>
     </div>

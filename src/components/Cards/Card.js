@@ -2,7 +2,12 @@ import styles from "./Card.module.css";
 
 const Card = (props) => {
   return (
-    <figure id={props.id} className={styles["card-box"]}>
+    <figure
+      id={props.id}
+      className={`${styles["card-box"]} ${props.miss ? styles.border : ""} ${
+        props.defaultCursor ? styles["default-cursor"] : ""
+      }`}
+    >
       <img
         className={styles["card-image"]}
         src={props.src}
