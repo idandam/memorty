@@ -3,13 +3,15 @@ import shuffle from "./utils/shuffle";
 import uniqueNumbers from "./utils/uniqueNumbers";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import Win from "./components/Win/Win";
 
 import { useReducer, useState } from "react";
 import { useEffect } from "react";
 
-import Modal from "react-bootstrap/Modal";
-
 import "./App.css";
+
+const LEVELS = 1,
+  CARDS_TO_ADD = 4;
 
 const resetClicks = (cards) => {
   let clicked = {};
@@ -20,7 +22,7 @@ const resetClicks = (cards) => {
 };
 
 const nextLevelIndicator = (level) => {
-  if (1 <= level <= 4) {
+  if (1 <= level <= LEVELS) {
     return 2 * level * (level + 1);
   }
 
@@ -28,7 +30,7 @@ const nextLevelIndicator = (level) => {
 };
 
 const isWin = (level, currScore) => {
-  return level === 4 && currScore === 2 * level * (level + 1);
+  return level === LEVELS && currScore === 2 * level * (level + 1) - 1;
 };
 const initalState = {
   cards: [],
@@ -36,6 +38,7 @@ const initalState = {
   currScore: 0,
   bestScore: 0,
   level: { val: 1 },
+  isWin: false,
 };
 
 const reducer = (prevState, action) => {
@@ -43,7 +46,8 @@ const reducer = (prevState, action) => {
     level = prevState.level,
     clicked = { ...prevState.clicked },
     bestScore = prevState.bestScore,
-    cards = prevState.cards;
+    cards = prevState.cards,
+    isWin = prevState.isWin;
 
   switch (action.type) {
     case "NEW_CARDS":
@@ -58,14 +62,13 @@ const reducer = (prevState, action) => {
       // If reached to next level
       if (currScore === nextLevelIndicator(level.val)) {
         // if didn't reach max level
-        if (level.val < 4) {
+        if (level.val < LEVELS) {
           level = { val: level.val + 1 };
-        } else {
-          // TODO handle pass all levels
         }
+
         // shuffle existing cards
       } else {
-        shuffle(cards);
+        // shuffle(cards);
       }
       if (currScore > bestScore) {
         bestScore = currScore;
@@ -76,18 +79,23 @@ const reducer = (prevState, action) => {
     case "NEW_GAME":
       level = { val: 1 };
       currScore = 0;
+      isWin = false;
+      break;
+
+    case "WIN":
+      isWin = true;
       break;
 
     default:
       throw new Error("Unexpected action after dispatch");
   }
-  return { cards, clicked, currScore, bestScore, level };
+  return { cards, clicked, currScore, bestScore, level, isWin };
 };
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initalState);
   const [characterCount, setCharacterCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("https://rickandmortyapi.com/api/character")
@@ -101,8 +109,11 @@ function App() {
       return;
     }
 
-    setIsLoading(true);
-    const characterIds = uniqueNumbers(state.level.val * 4, characterCount);
+    setLoading(true);
+    const characterIds = uniqueNumbers(
+      state.level.val * CARDS_TO_ADD,
+      characterCount
+    );
     const cards = [];
     fetch(`https://rickandmortyapi.com/api/character/${characterIds.join(",")}`)
       .then((response) => response.json())
@@ -117,7 +128,7 @@ function App() {
           })
         );
         dispatch({ type: "NEW_CARDS", cards });
-        setIsLoading(false);
+        setLoading(false);
       });
   }, [state.level, characterCount]);
 
@@ -126,10 +137,15 @@ function App() {
       dispatch({ type: "MISS", id });
     } else {
       if (isWin(state.level.val, state.currScore)) {
+        dispatch({ type: "WIN" });
       } else {
         dispatch({ type: "HIT", id });
       }
     }
+  };
+
+  const newGameHandler = () => {
+    dispatch({ type: "NEW_GAME" });
   };
 
   return (
@@ -139,14 +155,15 @@ function App() {
         level={state.level.val}
         bestScore={state.bestScore}
       />
-      {!isLoading && (
+      {!loading && !state.isWin && (
         <Cards
           cards={state.cards}
           level={state.level.val}
           onCardClick={cardClickHandler}
         />
       )}
-      {isLoading && <div className="loader" />}
+      {loading && <div className="loader" />}
+      {state.isWin && <Win onNewGame={newGameHandler} />}
       <Footer />
     </div>
   );

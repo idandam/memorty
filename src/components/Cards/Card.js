@@ -6,11 +6,10 @@ const Card = (props) => {
       <img
         className={styles["card-image"]}
         src={props.src}
-        // className={styles["card-image"]}
         alt={props.name}
       ></img>
       <figcaption className={styles["card-name"]}>{props.name}</figcaption>
-      <button className={styles["card-btn"]}>DETAILS</button>
+      {/* <button className={styles["card-btn"]}>DETAILS</button> */}
     </figure>
   );
 };
