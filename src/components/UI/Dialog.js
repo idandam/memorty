@@ -1,4 +1,4 @@
-import NewGameButton from "../Header/NewGameButton";
+import NewGameButton from "./NewGameButton";
 import styles from "./Dialog.module.css";
 
 const Dialog = (props) => {
@@ -7,10 +7,7 @@ const Dialog = (props) => {
       <header className={styles.header}>{props.title}</header>
       <p className={styles.body}>{props.body}</p>
       <footer className={styles.footer}>
-        <NewGameButton
-          onClick={props.onNewGame}
-          actionText={props.actionText}
-        />
+        <NewGameButton onClick={props.onNewGame}>PLAY AGAIN</NewGameButton>
       </footer>
     </div>
   );

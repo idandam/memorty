@@ -3,14 +3,14 @@ import shuffle from "./utils/shuffle";
 import uniqueNumbers from "./utils/uniqueNumbers";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-import Dialog from "./components/Dialog/Dialog";
+import Dialog from "./components/UI/Dialog";
 
 import { useReducer, useState } from "react";
 import { useEffect } from "react";
 
 import "./App.css";
 
-const LEVELS = 4,
+const LEVELS = 1,
   CARDS_TO_ADD = 4;
 
 const resetClicks = (cards) => {
@@ -161,6 +161,7 @@ function App() {
         level={state.level.val}
         bestScore={state.bestScore}
         isLose={state.isLose}
+        onNewGame={newGameHandler}
       />
       {!loading && !state.isWin && !state.isLose && (
         <Cards

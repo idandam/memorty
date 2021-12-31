@@ -1,7 +1,7 @@
 import Progress from "./Progress";
 import styles from "./Header.module.css";
 import logo from "../../img/logo.png";
-import NewGameButton from "./NewGameButton";
+import NewGameButton from "../UI/NewGameButton";
 
 const Header = (props) => {
   return (
@@ -11,7 +11,9 @@ const Header = (props) => {
         <p className={styles["logo-text"]}>Memorty</p>
       </div>
       {props.isLose && (
-        <NewGameButton actionText="TRY AGAIN" isAbsolute={true} />
+        <NewGameButton onClick={props.onNewGame} isAbsolute={true}>
+          TRY AGAIN
+        </NewGameButton>
       )}
       <Progress
         currScore={props.currScore}

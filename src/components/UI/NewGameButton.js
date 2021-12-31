@@ -8,7 +8,7 @@ const NewGameButton = (props) => {
         props.isAbsolute ? styles["btn__absolute"] : ""
       }`}
     >
-      {props.c}
+      {props.children}
     </button>
   );
 };
