@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 import "./App.css";
 
-const LEVELS = 1,
+const LEVELS = 5,
   CARDS_TO_ADD = 4;
 
 const resetClicks = (cards) => {
@@ -22,15 +22,17 @@ const resetClicks = (cards) => {
 };
 
 const nextLevelIndicator = (level) => {
-  if (1 <= level <= LEVELS) {
+  if (1 <= level && level < LEVELS) {
     return 2 * level * (level + 1);
+  } else if (level === LEVELS) {
+    return 2 * level * (level + 1) - 2;
   }
 
   throw new Error("Non-valid level: " + level);
 };
 
 const isWin = (level, currScore) => {
-  return level === LEVELS && currScore === 2 * level * (level + 1) - 1;
+  return level === LEVELS && currScore === nextLevelIndicator(level) - 1;
 };
 
 const initalState = {
@@ -38,7 +40,7 @@ const initalState = {
   clicked: {},
   currScore: 0,
   bestScore: 0,
-  level: { val: 1 },
+  level: { val: 5 },
   isWin: false,
   isLose: false,
 };
@@ -84,6 +86,7 @@ const reducer = (prevState, action) => {
 
     case "WIN":
       isWin = true;
+      currScore = currScore + 1;
       break;
 
     case "NEW_GAME":
@@ -96,6 +99,44 @@ const reducer = (prevState, action) => {
       throw new Error("Unexpected action after dispatch");
   }
   return { cards, clicked, currScore, bestScore, level, isWin, isLose };
+};
+
+const httpReq = (characterName, numOfCards) => {
+  let page = 1;
+
+  return fetch(
+    `https://rickandmortyapi.com/api/character/?name=${characterName}`
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((character) => {
+      page = Math.floor(Math.random() * character.info.pages) + 1;
+      return fetch(
+        `https://rickandmortyapi.com/api/character/?page=${page}&&name=${characterName}`
+      );
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      const characterIds = uniqueNumbers(
+        numOfCards,
+        Math.min(numOfCards, data.results.length)
+      );
+
+      const cards = [];
+
+      characterIds.forEach((id) => {
+        const character = data.results[id];
+        cards.push({
+          id: character.id,
+          name: character.name,
+          image: character.image,
+          status: character.status,
+          species: character.species,
+        });
+      });
+      return { cards, page };
+    });
 };
 
 function App() {
@@ -114,28 +155,82 @@ function App() {
     if (!characterCount) {
       return;
     }
-
     setLoading(true);
-    const characterIds = uniqueNumbers(
-      state.level.val * CARDS_TO_ADD,
-      characterCount
-    );
-    const cards = [];
-    fetch(`https://rickandmortyapi.com/api/character/${characterIds.join(",")}`)
-      .then((response) => response.json())
-      .then((characters) => {
-        characters.forEach((character) =>
-          cards.push({
-            id: character.id,
-            name: character.name,
-            image: character.image,
-            status: character.status,
-            species: character.species,
-          })
-        );
+    let characterIds,
+      cards = [];
+
+    if (state.level.val < LEVELS) {
+      characterIds = uniqueNumbers(
+        state.level.val * CARDS_TO_ADD,
+        characterCount
+      );
+      fetch(
+        `https://rickandmortyapi.com/api/character/${characterIds.join(",")}`
+      )
+        .then((response) => response.json())
+        .then((characters) => {
+          characters.forEach((character) =>
+            cards.push({
+              id: character.id,
+              name: character.name,
+              image: character.image,
+              status: character.status,
+              species: character.species,
+            })
+          );
+          dispatch({ type: "NEW_CARDS", cards });
+          setLoading(false);
+        });
+    }
+    // current level is 5
+    else {
+      let numOfCards = (state.level.val * CARDS_TO_ADD - 2) / 2,
+        ricksAndMorties = [],
+        additionalCards = [];
+
+      Promise.all([
+        httpReq("rick", numOfCards),
+        httpReq("morty", numOfCards),
+      ]).then((results) => {
+        let ricks = results[0].cards,
+          morties = results[1].cards;
+        ricksAndMorties = ricksAndMorties.concat(ricks).concat(morties);
+        if (ricksAndMorties.length < numOfCards * 2) {
+          const additionalCardsData =
+            ricks.length < morties.length
+              ? { name: "rick", data: results[0] }
+              : { name: "morty", data: results[1] };
+
+          numOfCards = numOfCards - additionalCardsData.data.cards.length;
+          const newPage = Math.floor(
+            Math.random() * (additionalCardsData.data.page - 1)
+          );
+          fetch(
+            `https://rickandmortyapi.com/api/character/?page=${newPage}&&name=${additionalCardsData.name}`
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              const characterIds = uniqueNumbers(
+                numOfCards,
+                data.results.length
+              );
+              characterIds.forEach((id) => {
+                const character = data.results[id];
+                additionalCards.push({
+                  id: character.id,
+                  name: character.name,
+                  image: character.image,
+                  status: character.status,
+                  species: character.species,
+                });
+              });
+            });
+        }
+        cards = ricksAndMorties.concat(additionalCards);
         dispatch({ type: "NEW_CARDS", cards });
         setLoading(false);
       });
+    }
   }, [state.level, characterCount]);
 
   const cardClickHandler = (id) => {
