@@ -40,7 +40,7 @@ const initalState = {
   clicked: {},
   currScore: 0,
   bestScore: 0,
-  level: { val: 5 },
+  level: { val: 1 },
   isWin: false,
   isLose: false,
 };
@@ -73,7 +73,7 @@ const reducer = (prevState, action) => {
 
         // shuffle existing cards
       } else {
-        // shuffle(cards);
+        shuffle(cards);
       }
       if (currScore > bestScore) {
         bestScore = currScore;
@@ -111,7 +111,9 @@ const httpReq = (characterName, numOfCards) => {
       return response.json();
     })
     .then((character) => {
-      page = Math.floor(Math.random() * character.info.pages) + 1;
+      page =
+        character.info.pages ||
+        Math.floor(Math.random() * character.info.pages) + 1;
       return fetch(
         `https://rickandmortyapi.com/api/character/?page=${page}&&name=${characterName}`
       );
@@ -119,8 +121,8 @@ const httpReq = (characterName, numOfCards) => {
     .then((response) => response.json())
     .then((data) => {
       const characterIds = uniqueNumbers(
-        numOfCards,
-        Math.min(numOfCards, data.results.length)
+        Math.min(numOfCards, data.results.length),
+        data.results.length
       );
 
       const cards = [];
@@ -185,51 +187,58 @@ function App() {
     // current level is 5
     else {
       let numOfCards = (state.level.val * CARDS_TO_ADD - 2) / 2,
-        ricksAndMorties = [],
-        additionalCards = [];
+        ricksAndMorties = [];
 
-      Promise.all([
-        httpReq("rick", numOfCards),
-        httpReq("morty", numOfCards),
-      ]).then((results) => {
-        let ricks = results[0].cards,
-          morties = results[1].cards;
-        ricksAndMorties = ricksAndMorties.concat(ricks).concat(morties);
-        if (ricksAndMorties.length < numOfCards * 2) {
-          const additionalCardsData =
-            ricks.length < morties.length
-              ? { name: "rick", data: results[0] }
-              : { name: "morty", data: results[1] };
+      Promise.all([httpReq("rick", numOfCards), httpReq("morty", numOfCards)])
+        .then((results) => {
+          let ricks = results[0].cards,
+            morties = results[1].cards;
+          ricksAndMorties = ricksAndMorties.concat(ricks).concat(morties);
+          if (ricksAndMorties.length < numOfCards * 2) {
+            const additionalCardsData =
+              ricks.length < morties.length
+                ? { name: "rick", page: results[0].page }
+                : { name: "morty", page: results[1].page };
 
-          numOfCards = numOfCards - additionalCardsData.data.cards.length;
-          const newPage = Math.floor(
-            Math.random() * (additionalCardsData.data.page - 1)
-          );
-          fetch(
-            `https://rickandmortyapi.com/api/character/?page=${newPage}&&name=${additionalCardsData.name}`
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              const characterIds = uniqueNumbers(
-                numOfCards,
-                data.results.length
-              );
-              characterIds.forEach((id) => {
-                const character = data.results[id];
-                additionalCards.push({
-                  id: character.id,
-                  name: character.name,
-                  image: character.image,
-                  status: character.status,
-                  species: character.species,
+            numOfCards = 2 * numOfCards - ricksAndMorties.length;
+            const newPage = Math.floor(
+              Math.random() * (additionalCardsData.page - 1)
+            );
+            return fetch(
+              `https://rickandmortyapi.com/api/character/?page=${newPage}&&name=${additionalCardsData.name}`
+            )
+              .then((response) => response.json())
+              .then((data) => {
+                const characterIds = uniqueNumbers(
+                  numOfCards,
+                  data.results.length
+                );
+
+                const additionalCards = [];
+
+                characterIds.forEach((id) => {
+                  const character = data.results[id];
+                  additionalCards.push({
+                    id: character.id,
+                    name: character.name,
+                    image: character.image,
+                    status: character.status,
+                    species: character.species,
+                  });
                 });
+                return ricksAndMorties.concat(additionalCards);
+              })
+              .catch((err) => {
+                console.log(err);
               });
-            });
-        }
-        cards = ricksAndMorties.concat(additionalCards);
-        dispatch({ type: "NEW_CARDS", cards });
-        setLoading(false);
-      });
+          } else {
+            return ricksAndMorties;
+          }
+        })
+        .then((cards) => {
+          dispatch({ type: "NEW_CARDS", cards });
+          setLoading(false);
+        });
     }
   }, [state.level, characterCount]);
 
