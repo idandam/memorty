@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 import "./App.css";
 
-const LEVELS = 1,
+const LEVELS = 4,
   CARDS_TO_ADD = 4;
 
 const resetClicks = (cards) => {
@@ -173,7 +173,7 @@ function App() {
         <Cards
           cards={state.cards}
           level={state.level.val}
-          clicked={Object.getOwnPropertyNames(state.clicked).filter(
+          notClicked={Object.getOwnPropertyNames(state.clicked).filter(
             (id) => !state.clicked[id]
           )}
         />

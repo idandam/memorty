@@ -4,9 +4,9 @@ const Card = (props) => {
   return (
     <figure
       id={props.id}
-      className={`${styles["card-box"]} ${props.miss ? styles.border : ""} ${
-        props.defaultCursor ? styles["default-cursor"] : ""
-      }`}
+      className={`${styles["card-box"]} ${
+        props.isClicked ? styles.border : ""
+      } ${props.defaultCursor ? styles["default-cursor"] : ""}`}
     >
       <img
         className={styles["card-image"]}

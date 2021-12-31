@@ -12,7 +12,9 @@ logo-font: #e6ebed
 */
 
 .header {
+  position: relative;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 0.8rem 3.2rem;
@@ -30,5 +32,15 @@ logo-font: #e6ebed
 }
 
 .logo-text {
+  color: #e6ebed;
+}
+
+.loseMessage {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translatex(-50%);
+  font-size: 2.4rem;
+  font-weight: 600;
   color: #e6ebed;
 }

@@ -16,7 +16,7 @@ const Cards = (props) => {
   return (
     <div
       onClick={clickHandler}
-      className={`${styles.grid} ${!props.clicked ? styles.animate : ""}`}
+      className={`${styles.grid} ${!props.notClicked ? styles.animate : ""}`}
     >
       {props.cards.map((card) => (
         <Card
@@ -24,8 +24,8 @@ const Cards = (props) => {
           id={card.id}
           name={card.name}
           src={card.image}
-          miss={props.clicked && props.clicked.includes(card.id + "")}
-          defaultCursor={!!props.clicked}
+          isClicked={props.notClicked && props.notClicked.includes(card.id + "")}
+          defaultCursor={props.notClicked}
         />
       ))}
     </div>

@@ -30,21 +30,7 @@
   align-items: center;
 }
 
-.btn {
-  padding: 1.2rem;
-  margin-top: 0.8rem;
-  letter-spacing: 0.1rem;
-  background-color: #1a4a59;
-  border: none;
-  border-radius: 0.4rem;
-  font-size: 1.8rem;
-  color: #e6ebed;
-}
 
-.btn:hover {
-  background-color: #013646;
-  cursor: pointer;
-}
 
 @keyframes scale {
   0% {
