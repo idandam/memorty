@@ -62,21 +62,20 @@ const httpReq = (url, numOfCards) => {
       .then((data) => {
         const characterIds = uniqueNumbers(numOfCards, data.results.length);
         const cards = getCardModels(data.results, characterIds);
+        console.log(url.searchParams.get("name"), data, cards);
         return { cards, page: url.searchParams.get("page") };
       });
   } else if (url.searchParams.has("name")) {
-    console.log(url.href);
     return fetch(url)
       .then((response) => {
         return response.json();
       })
       .then((character) => {
         let page = Math.floor(Math.random() * character.info.pages) + 1;
+        console.log(page, url.searchParams.get("name"));
         return httpReq(
-          buildURL(
-            `page=${page}&name=${url.searchParams.get("name")}`,
-            numOfCards
-          )
+          buildURL(`page=${page}&name=${url.searchParams.get("name")}`),
+          numOfCards
         );
       });
 

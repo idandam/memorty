@@ -161,6 +161,7 @@ function App() {
         .then((results) => {
           let ricks = results[0].cards,
             morties = results[1].cards;
+          console.log(results);
           ricksAndMorties = ricksAndMorties.concat(ricks).concat(morties);
           if (ricksAndMorties.length < numOfCards * 2) {
             const additionalCardsData =
