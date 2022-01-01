@@ -8,6 +8,8 @@ import Dialog from "./components/UI/Dialog";
 import { useReducer, useState } from "react";
 import { useEffect } from "react";
 
+import httpReq from "./utils/httpReq";
+
 import "./App.css";
 
 const LEVELS = 5,
@@ -102,36 +104,6 @@ const reducer = (prevState, action) => {
   }
   return { cards, clicked, currScore, bestScore, level, isWin, isLose };
 };
-// There're two different fetches.
-
-// The first one is when the end-point is a list of known character ids. Here
-// the request was for characters with these ids.
-// In this case ids will be falsy .
-
-// The second request is for character ids. Then we chose characters from
-// a known set of characters such that a subset of them have the ids,
-// so ids[0, 1 ,..., ids.length - 1] will be contained in {cid_1, cid_2, ..., cid_characters.length},
-// such that cid_j is the id of character j
-// In this case ids will be truthy.
-const getCardModels = (characters, ids) => {
-  const cards = [];
-  const numOfCards = ids ? ids.length : characters.length;
-  let i = 0;
-  let character;
-  while (i < numOfCards) {
-    character = ids ? characters[ids[i]] : characters[i];
-    cards.push({
-      id: character.id,
-      name: character.name,
-      image: character.image,
-      status: character.status,
-      species: character.species,
-    });
-
-    i++;
-  }
-  return cards;
-};
 
 const buildURL = (path) => {
   let url = new URL(base);
@@ -146,24 +118,6 @@ const buildURL = (path) => {
   }
   return url;
 };
-const httpReq = (characterName, numOfCards) => {
-  let page = 1;
-
-  return fetch(buildURL(`name=${characterName}`))
-    .then((response) => {
-      return response.json();
-    })
-    .then((character) => {
-      page = Math.floor(Math.random() * character.info.pages) + 1;
-      return fetch(buildURL(`page=${page}&name=${characterName}`));
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      const characterIds = uniqueNumbers(numOfCards, data.results.length);
-      const cards = getCardModels(data.results, characterIds);
-      return { cards, page };
-    });
-};
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -171,12 +125,9 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // delete all and replace with
-    // let count = httpReq()
-    // setCharacterCount(count)
-    fetch(buildURL())
-      .then((response) => response.json())
-      .then((allCharacters) => setCharacterCount(allCharacters.info.count));
+    httpReq(buildURL()).then((characterCount) => {
+      setCharacterCount(characterCount);
+    });
   }, []);
 
   useEffect(() => {
@@ -184,31 +135,29 @@ function App() {
       return;
     }
     setLoading(true);
-    let characterIds,
-      cards = [];
 
+    let characterIds;
     if (state.level.val < LEVELS) {
-      characterIds = uniqueNumbers(
-        state.level.val * CARDS_TO_ADD,
-        characterCount
-      );
-      // delete all until
-      fetch(buildURL(`${characterIds.join(",")}`))
-        .then((response) => response.json())
-        .then((characters) => {
-          // here and add  replace the line below with
-          // httpReq(buildURL(`${characterIds.join(",")}`)).then(cardsModels=> cards = getCardModels(characters); )
-          cards = getCardModels(characters);
+      let numOfCards = state.level.val * CARDS_TO_ADD;
+
+      characterIds = uniqueNumbers(numOfCards, characterCount);
+
+      httpReq(buildURL(`${characterIds.join(",")}`), numOfCards).then(
+        (cards) => {
           dispatch({ type: "NEW_CARDS", cards });
           setLoading(false);
-        });
+        }
+      );
     }
     // current level is 5
     else {
       let numOfCards = (state.level.val * CARDS_TO_ADD - 2) / 2,
         ricksAndMorties = [];
 
-      Promise.all([httpReq("rick", numOfCards), httpReq("morty", numOfCards)])
+      Promise.all([
+        httpReq(buildURL("name=rick"), numOfCards),
+        httpReq(buildURL("name=morty"), numOfCards),
+      ])
         .then((results) => {
           let ricks = results[0].cards,
             morties = results[1].cards;
@@ -223,30 +172,12 @@ function App() {
             const newPage = Math.floor(
               Math.random() * (additionalCardsData.page - 1)
             );
-            return fetch(
-              buildURL(`page=${newPage}&name=${additionalCardsData.name}`)
+            return httpReq(
+              buildURL(`page=${newPage}&name=${additionalCardsData.name}`),
+              numOfCards
             )
-              .then((response) => response.json())
               .then((data) => {
-                // const characterIds = uniqueNumbers(numOfCards, data.results.length);
-                // const cards = getCardModels(data.results, characterIds);
-                // return { cards, page };
-                const characterIds = uniqueNumbers(
-                  numOfCards,
-                  data.results.length
-                );
-
-                const additionalCards = getCardModels(
-                  data.results,
-                  characterIds
-                );
-                // delete all htppReq code above
-                // replace the line below with
-                // let additionalards =
-                //  buildURL(`page=${newPage}&name=${additionalCardsData.name}`)
-                //  .then(cards= > { return ricksAndMorties.concat} )
-
-                return ricksAndMorties.concat(additionalCards);
+                return ricksAndMorties.concat(data.cards);
               })
               .catch((err) => {
                 console.log(err);
