@@ -62,7 +62,6 @@ const fetchCharacterByPage = (url, numOfCards) => {
     .then((data) => {
       const characterIds = uniqueNumbers(numOfCards, data.results.length);
       const cards = getCardModels(data.results, characterIds);
-      console.log(url.searchParams.get("name"), data, cards);
       return { cards, page: url.searchParams.get("page") };
     });
 };
@@ -80,7 +79,7 @@ const fetchCharacterCount = (url) => {
     .then((response) => response.json())
     .then((allCharacters) => allCharacters.info.count);
 };
-//  (characterName, numOfCards)
+
 const httpReq = (url, numOfCards) => {
   if (!isNaN(url.href[url.href.length - 1])) {
     return fetchCharactersByIds(url);
@@ -95,8 +94,8 @@ const httpReq = (url, numOfCards) => {
         numOfCards
       );
     });
-    // This means that the request is for the characters count
   }
+  // This means that the request is for the characters count
   if (!numOfCards) {
     return fetchCharacterCount(url);
   }
