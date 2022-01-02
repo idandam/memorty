@@ -8,14 +8,13 @@ import Dialog from "./components/UI/Dialog";
 import { useReducer, useState } from "react";
 import { useEffect } from "react";
 
-import httpReq from "./utils/httpReq";
+import httpReq from "./API/httpReq";
+import { NUMBER_LIST_REG_EXP } from "./constants/constants";
+import { BASE } from "./constants/constants";
+import { LEVELS } from "./constants/constants";
+import { CARDS_TO_ADD } from "./constants/constants";
 
 import "./App.css";
-
-const LEVELS = 5,
-  CARDS_TO_ADD = 4,
-  base = "https://rickandmortyapi.com/api/character/",
-  commaSeparatedNumberListRegExp = /^\d(\d)*(,\d(\d)*)*$/;
 
 const resetClicks = (cards) => {
   let clicked = {};
@@ -106,9 +105,9 @@ const reducer = (prevState, action) => {
 };
 
 const buildURL = (path) => {
-  let url = new URL(base);
+  let url = new URL(BASE);
   if (path) {
-    if (commaSeparatedNumberListRegExp.test(path)) {
+    if (NUMBER_LIST_REG_EXP.test(path)) {
       url.pathname = url.pathname.concat(path);
     } else if (path.includes("=")) {
       new URLSearchParams(path).forEach((value, key) => {
