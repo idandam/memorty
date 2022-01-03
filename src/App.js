@@ -16,7 +16,7 @@ const isWin = (level, currScore) => {
 };
 
 function App() {
-  const { state, loading, dispatch } = useHttp();
+  const { error, state, loading, dispatch } = useHttp();
 
   const cardClickHandler = (id) => {
     if (state.clicked[id]) {
@@ -35,48 +35,53 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <Header
-        currScore={state.currScore}
-        level={state.level.val}
-        bestScore={state.bestScore}
-        isLose={state.isLose}
-        onNewGame={newGameHandler}
-      />
-      {!loading && !state.isWin && !state.isLose && (
-        <Cards
-          cards={state.cards}
-          level={state.level.val}
-          onCardClick={cardClickHandler}
-        />
-      )}
-      {!loading && state.isLose && (
-        <Cards
-          cards={state.cards}
-          level={state.level.val}
-          notClicked={Object.getOwnPropertyNames(state.clicked).filter(
-            (id) => !state.clicked[id]
+    <>
+      {error && <p>ERROR</p>}
+      {!error && (
+        <div className="container">
+          <Header
+            currScore={state.currScore}
+            level={state.level.val}
+            bestScore={state.bestScore}
+            isLose={state.isLose}
+            onNewGame={newGameHandler}
+          />
+          {!loading && !state.isWin && !state.isLose && (
+            <Cards
+              cards={state.cards}
+              level={state.level.val}
+              onCardClick={cardClickHandler}
+            />
           )}
-        />
-      )}
+          {!loading && state.isLose && (
+            <Cards
+              cards={state.cards}
+              level={state.level.val}
+              notClicked={Object.getOwnPropertyNames(state.clicked).filter(
+                (id) => !state.clicked[id]
+              )}
+            />
+          )}
 
-      {loading && <div className="loader" />}
-      {state.isWin && (
-        <Dialog
-          title="Win!"
-          body={
-            <>
-              Great job!.
-              <br />
-              You've finished all the levels.
-            </>
-          }
-          actionText="PLAY AGAIN"
-          onNewGame={newGameHandler}
-        />
+          {loading && <div className="loader" />}
+          {state.isWin && (
+            <Dialog
+              title="Win!"
+              body={
+                <>
+                  Great job!.
+                  <br />
+                  You've finished all the levels.
+                </>
+              }
+              actionText="PLAY AGAIN"
+              onNewGame={newGameHandler}
+            />
+          )}
+          <Footer />
+        </div>
       )}
-      <Footer />
-    </div>
+    </>
   );
 }
 

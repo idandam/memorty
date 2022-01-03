@@ -3,36 +3,40 @@ import buildURL from "./buildURL";
 
 import uniqueNumbers from "../utils/uniqueNumbers";
 
+const fetchData = (url) => {
+  return fetch(url).then((response) => {
+    if (!response.ok) {
+      throw new Error();
+    }
+    return response.json();
+  });
+};
+
 const fetchCharactersByIds = (url) => {
-  return fetch(url)
-    .then((response) => response.json())
-    .then((characters) => {
-      return getCardModels(characters);
-    });
+  return fetchData(url).then((characters) => {
+    return getCardModels(characters);
+  });
 };
 
 const fetchCharacterByPage = (url, numOfCards) => {
-  return fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      const characterIds = uniqueNumbers(numOfCards, data.results.length);
-      const cards = getCardModels(data.results, characterIds);
-      return { cards, page: url.searchParams.get("page") };
-    });
+  return fetchData(url).then((characterData) => {
+    const characterIds = uniqueNumbers(
+      numOfCards,
+      characterData.results.length
+    );
+    const cards = getCardModels(characterData.results, characterIds);
+    return { cards, page: url.searchParams.get("page") };
+  });
 };
 
 const fetchCharacterPage = (url) => {
-  return fetch(url)
-    .then((response) => {
-      return response.json();
-    })
-    .then((character) => Math.floor(Math.random() * character.info.pages) + 1);
+  return fetchData(url).then(
+    (character) => Math.floor(Math.random() * character.info.pages) + 1
+  );
 };
 
 const fetchCharacterCount = (url) => {
-  return fetch(url)
-    .then((response) => response.json())
-    .then((allCharacters) => allCharacters.info.count);
+  return fetchData(url).then((allCharacters) => allCharacters.info.count);
 };
 
 const httpReq = (url, numOfCards) => {

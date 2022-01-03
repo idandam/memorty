@@ -10,27 +10,48 @@ const useHttp = () => {
   const [state, dispatch] = useReducer(store.reducer, store.initialState);
   const [characterCount, setCharacterCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    httpReq(buildURL()).then((characterCount) => {
-      setCharacterCount(characterCount);
-    });
+    if (loading) {
+      let tid = setTimeout(() => {
+        setError(true);
+      }, 1000);
+
+      return () => {
+        clearTimeout(tid);
+      };
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    httpReq(buildURL())
+      .then((characterCount) => {
+        setCharacterCount(characterCount);
+      })
+      .catch(() => {
+        setError(true);
+      });
   }, []);
 
   useEffect(() => {
     if (!characterCount) {
       return;
     }
+
     setLoading(true);
 
-    getCards(state.level, characterCount).then((cards) => {
-      console.log("in use effect", cards);
-      dispatch({ type: "NEW_CARDS", cards });
-      setLoading(false);
-    });
+    getCards(state.level, characterCount)
+      .then((cards) => {
+        dispatch({ type: "NEW_CARDS", cards });
+        setLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+      });
   }, [state.level, characterCount]);
 
-  return { state, loading, dispatch };
+  return { error, state, loading, dispatch };
 };
 
 export default useHttp;
