@@ -4,7 +4,19 @@ const ProgressElement = (props) => {
   return (
     <div className={styles.container}>
       <p className={styles.name}>{props.name}</p>
-      <p className={`${styles.value} ${styles.animate}`}>{props.value}</p>
+      <p
+        className={`${styles.value} ${
+          props.name === "Level" ? styles["p__level"] : ""
+        }`}
+      >
+        {props.value}
+        {props.name === "Level" && (
+          <>
+            <div className={styles.vert}></div>
+            <span className={styles["max-level"]}>5</span>
+          </>
+        )}
+      </p>
     </div>
   );
 };

@@ -12,7 +12,26 @@
 }
 
 .value {
-  font-size: 2.4rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #fca399;
+}
+
+.max-level {
   font-weight: 600;
   color: #fa7c6d;
+}
+
+.vert {
+  width: 0rem;
+  height: 100%;
+  margin: 0 0.8rem;
+  background-color: #fff;
+  border-left: 0.5px solid #fff;
+  border-right: 0.5px solid #fff;
+}
+
+.p__level {
+  display: flex;
+  align-items: center;
 }
