@@ -15,8 +15,6 @@ body {
   background-color: #fff;
 }
 
-
-
 img {
   image-rendering: -webkit-optimize-contrast;
 }
@@ -37,5 +35,99 @@ img {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@media (min-height: 86rem) {
+  @media (max-width: 160rem) {
+    html {
+      font-size: 120.25%;
+    }
+  }
+
+  @media (max-width: 145rem) {
+    html {
+      font-size: 105.25%;
+    }
+  }
+  @media (max-width: 88rem) {
+    html {
+      font-size: 91.25%;
+    }
+  }
+  @media (max-width: 63rem) {
+    html {
+      font-size: 74.25%;
+    }
+  }
+}
+
+@media (max-width: 50em) {
+  html {
+    font-size: 46.25%;
+  }
+}
+
+@media (max-width: 32em) {
+  html {
+    font-size: 36.25%;
+  }
+}
+
+@media (max-width: 22em) {
+  html {
+    font-size: 30.25%;
+  }
+}
+
+@media (max-width: 13em) {
+  html {
+    font-size: 20.25%;
+  }
+}
+
+@media (max-height: 41em) {
+  @media (max-width: 64rem) {
+    html {
+      font-size: 50.25%;
+    }
+  }
+
+  @media (max-width: 41rem) {
+    html {
+      font-size: 40.25%;
+    }
+  }
+
+  @media (max-width: 29rem) {
+    html {
+      font-size: 33.25%;
+    }
+  }
+}
+
+@media (max-height: 31rem) {
+  @media (max-width: 48rem) {
+    html {
+      font-size: 37.25%;
+    }
+  }
+
+  @media (max-width: 32rem) {
+    html {
+      font-size: 31.25%;
+    }
+  }
+
+  @media (max-width: 20rem) {
+    html {
+      font-size: 26.25%;
+    }
+  }
+}
+
+@media (max-width: 18rem) {
+  html {
+    font-size: 31.25%;
   }
 }

@@ -1,5 +1,13 @@
 .progress {
   display: flex;
   gap: 3.2rem;
-  /* margin-left: auto; */
+  font-size: 1.8rem;
+}
+
+@media (max-height: 41rem) {
+  @media (max-width: 29rem) {
+    .progress {
+      font-size: 1.2rem;
+    }
+  }
 }
