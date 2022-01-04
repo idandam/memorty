@@ -5,24 +5,19 @@ import Dialog from "./components/UI/Dialog";
 
 import useHttp from "./hooks/useHttp";
 
-import nextLevelIndicator from "./utils/nextLevelIndicator";
+import levelMaxScore from "./utils/nextLevelIndicator";
 
 import { LEVELS } from "./constants/constants";
 
 import "./App.css";
 
 const isWin = (level, currScore) => {
-  return level === LEVELS && currScore === nextLevelIndicator(level) - 1;
+  return level === LEVELS && currScore === levelMaxScore(level) - 1;
 };
 
 function App() {
   const { error, state, loading, dispatch } = useHttp();
 
-  if (state.level.val === LEVELS) {
-    document.documentElement.classList.add("final-level");
-  } else {
-    document.documentElement.classList.remove("final-level");
-  }
   const cardClickHandler = (id) => {
     if (state.clicked[id]) {
       dispatch({ type: "MISS", id });
@@ -71,14 +66,8 @@ function App() {
           {loading && <div className="loader" />}
           {state.isWin && (
             <Dialog
-              title="Win!"
-              body={
-                <>
-                  Great job!.
-                  <br />
-                  You've finished all the levels.
-                </>
-              }
+              title="Great job!"
+              body={<>I hoped you enjoyed the game</>}
               actionText="PLAY AGAIN"
               onNewGame={newGameHandler}
             />

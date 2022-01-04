@@ -1,6 +1,6 @@
 import shuffle from "../utils/shuffle";
 import { LEVELS } from "../constants/constants";
-import nextLevelIndicator from "../utils/nextLevelIndicator";
+import levelMaxScore from "../utils/nextLevelIndicator";
 
 const resetClicks = (cards) => {
   let clicked = {};
@@ -14,7 +14,7 @@ const initialState = {
   clicked: {},
   currScore: 0,
   bestScore: 0,
-  level: { val: 1 },
+  level: { val: 6 },
   isWin: false,
   isLose: false,
 };
@@ -39,7 +39,7 @@ const reducer = (prevState, action) => {
       clicked[action.id] = true;
       currScore = currScore + 1;
       // If reached to next level
-      if (currScore === nextLevelIndicator(level.val)) {
+      if (currScore === levelMaxScore(level.val)) {
         // if didn't reach max level
         if (level.val < LEVELS) {
           level = { val: level.val + 1 };
@@ -47,7 +47,7 @@ const reducer = (prevState, action) => {
 
         // shuffle existing cards
       } else {
-        shuffle(cards);
+        // shuffle(cards);
       }
       if (currScore > bestScore) {
         bestScore = currScore;

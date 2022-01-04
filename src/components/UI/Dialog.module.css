@@ -1,36 +1,42 @@
 .dialog {
-  max-width: 60rem;
-  padding: 0.4rem 0;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
+  display: grid;
+  grid-template-columns: 1fr;
+  min-width: 60rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.1);
   animation: scale 1s ease-out;
 }
-.header,
-.body,
-.footer {
-  padding: 0.8rem 1.8rem;
-}
+
 .header {
-  font-size: 3.2rem;
-  letter-spacing: 0.18rem;
+  font-size: 2.8rem;
+  letter-spacing: 0.05rem;
+}
+
+.header,
+.body {
   border-bottom: 1px solid #ddd;
-  padding-bottom: 0.4rem;
+}
+
+.header p {
+  padding: 2.4rem;
 }
 
 .body {
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   line-height: 1.4;
-  margin-top: 0.4rem;
+}
+.body p {
+  padding: 1.2rem 2.4rem 1.8rem 2.4rem;
 }
 
 .footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1.8rem;
+  justify-self: end;
 }
-
-
 
 @keyframes scale {
   0% {

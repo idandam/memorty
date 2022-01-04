@@ -8,7 +8,7 @@
   font-size: 1.6rem;
   text-align: center;
   border-radius: 3px;
-  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1.2rem 2rem rgba(0, 0, 0, 0.15);
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s;
@@ -23,7 +23,7 @@
 }
 .card-box:hover:not(.default-cursor) {
   transform: translateY(-0.7rem) scale(1.03);
-  box-shadow: 0 1.6rem 2.5rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1.8rem 4rem rgba(0, 0, 0, 0.15);
 }
 
 .card-image {
