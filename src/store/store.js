@@ -14,7 +14,7 @@ const initialState = {
   clicked: {},
   currScore: 0,
   bestScore: 0,
-  level: { val: 6 },
+  level: { val: 1 },
   isWin: false,
   isLose: false,
 };
@@ -47,7 +47,7 @@ const reducer = (prevState, action) => {
 
         // shuffle existing cards
       } else {
-        // shuffle(cards);
+        shuffle(cards);
       }
       if (currScore > bestScore) {
         bestScore = currScore;

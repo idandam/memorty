@@ -5,11 +5,8 @@ import styles from "./Cards.module.css";
 const Cards = (props) => {
   const clickHandler = (event) => {
     const figure = event.target.closest("figure");
-    if (figure) {
-      if (event.target.tagName === "BUTTON") {
-      } else if (props.onCardClick) {
-        props.onCardClick(figure.id);
-      }
+    if (figure && props.onCardClick) {
+      props.onCardClick(figure.id);
     }
   };
   return (

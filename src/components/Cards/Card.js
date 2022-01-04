@@ -14,7 +14,6 @@ const Card = (props) => {
         alt={props.name}
       ></img>
       <figcaption className={styles["card-name"]}>{props.name}</figcaption>
-      {/* <button className={styles["card-btn"]}>DETAILS</button> */}
     </figure>
   );
 };

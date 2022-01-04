@@ -14,13 +14,6 @@
   transition: all 0.3s;
 }
 
-.border {
-  box-shadow: 0 0 0.8rem 0.1rem #fa7c6d;
-  animation: shakeShadow 0.4s ease-in;
-}
-.default-cursor {
-  cursor: default;
-}
 .card-box:hover:not(.default-cursor) {
   transform: translateY(-0.7rem) scale(1.03);
   box-shadow: 0 1.8rem 4rem rgba(0, 0, 0, 0.15);
@@ -39,9 +32,14 @@
   word-break: break-word;
   hyphens: auto;
 }
-.card-btn {
-  padding: 0.1rem;
-  background-color: green;
+
+.border {
+  box-shadow: 0 0 0.8rem 0.1rem #fa7c6d;
+  animation: shakeShadow 0.4s ease-in;
+}
+
+.default-cursor {
+  cursor: default;
 }
 
 @keyframes shakeShadow {
