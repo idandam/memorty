@@ -1,7 +1,7 @@
 .progress {
   display: flex;
   gap: 3.2rem;
-  font-size: 1.8rem;
+  font-size: 2.2rem;
 }
 
 @media (max-height: 41rem) {

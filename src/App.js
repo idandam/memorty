@@ -18,6 +18,11 @@ const isWin = (level, currScore) => {
 function App() {
   const { error, state, loading, dispatch } = useHttp();
 
+  if (state.level.val === LEVELS) {
+    document.documentElement.classList.add("final-level");
+  } else {
+    document.documentElement.classList.remove("final-level");
+  }
   const cardClickHandler = (id) => {
     if (state.clicked[id]) {
       dispatch({ type: "MISS", id });

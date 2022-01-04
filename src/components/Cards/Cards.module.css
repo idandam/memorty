@@ -1,9 +1,9 @@
-.grid {
+.container {
   display: flex;
   justify-content: center;
   gap: 1.6rem;
   flex-wrap: wrap;
-  max-width: 120rem;
+  max-width: 160rem;
   padding: 2.4rem;
 }
 
@@ -21,9 +21,3 @@
     transform: scale(1);
   }
 }
-
-/* @media (max-width: 51em) {
-  html {
-    font-size: 56.25%;
-  }
-} */
