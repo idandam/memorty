@@ -44,20 +44,11 @@ img {
     html {
       font-size: 120.25%;
     }
-    .final-level {
-      font-size: 87.25%;
-    }
   }
 
   @media (max-width: 145em) {
     html {
       font-size: 105.25%;
-    }
-  }
-
-  @media (max-width: 104em) {
-    .final-level {
-      font-size: 68.25%;
     }
   }
 
