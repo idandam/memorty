@@ -13,7 +13,7 @@ const ProgressElement = (props) => {
         {props.name === "Level" && (
           <>
             <span className={styles.vert}></span>
-            <span className={styles["max-level"]}>5</span>
+            <span className={styles["max-level"]}>6</span>
           </>
         )}
       </p>

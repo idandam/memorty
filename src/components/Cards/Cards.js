@@ -2,6 +2,8 @@ import Card from "./Card";
 
 import styles from "./Cards.module.css";
 
+import { LEVELS } from "../../constants/constants";
+
 const Cards = (props) => {
   const clickHandler = (event) => {
     const figure = event.target.closest("figure");
@@ -16,7 +18,9 @@ const Cards = (props) => {
   return (
     <div
       onClick={clickHandler}
-      className={`${styles.grid} ${!props.notClicked ? styles.animate : ""}`}
+      className={`${styles.grid} ${
+        props.level === LEVELS ? styles["last-level"] : ""
+      } ${!props.notClicked ? styles.animate : ""}`}
     >
       {props.cards.map((card) => (
         <Card
@@ -24,7 +28,9 @@ const Cards = (props) => {
           id={card.id}
           name={card.name}
           src={card.image}
-          isClicked={props.notClicked && props.notClicked.includes(card.id + "")}
+          isClicked={
+            props.notClicked && props.notClicked.includes(card.id + "")
+          }
           defaultCursor={props.notClicked}
         />
       ))}

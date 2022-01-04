@@ -25,7 +25,11 @@ const fetchCharacterByPage = (url, numOfCards) => {
       characterData.results.length
     );
     const cards = getCardModels(characterData.results, characterIds);
-    return { cards, page: url.searchParams.get("page") };
+    return {
+      cards,
+      page: url.searchParams.get("page"),
+      pages: characterData.info.pages,
+    };
   });
 };
 

@@ -1,10 +1,15 @@
-import { LEVELS } from "../constants/constants";
-import { CARDS_TO_ADD } from "../constants/constants";
+import {
+  LEVELS,
+  LEVEL_FIVE_CARDS,
+  LEVEL_SIX_CARDS,
+  CARDS_TO_ADD,
+} from "../constants/constants";
 
 import buildURL from "./buildURL";
 import httpReq from "./httpReq";
 
 import uniqueNumbers from "../utils/uniqueNumbers";
+import randomNumber from "../utils/randomNumber";
 
 // There're two different fetches.
 
@@ -39,62 +44,52 @@ export const getCardModels = (characters, ids) => {
 
 export const getCards = (level, characterCount, rickAndMortiesData) => {
   let characterIds;
-  if (level.val < LEVELS) {
+  if (level.val < LEVELS - 1) {
     let numOfCards = level.val * CARDS_TO_ADD;
     characterIds = uniqueNumbers(numOfCards, characterCount);
     return httpReq(buildURL(`${characterIds.join(",")}`), numOfCards);
   }
-  // Else we're at the final level
-  // If the parameter will be truthy then there's a request for additional cards
-  // of ricks or morties that will be added to an already exists ricks and morties cards
-  if (rickAndMortiesData) {
-    let { charactersData, numOfCards } = rickAndMortiesData;
-    const cardsToAddData =
-      charactersData.ricks.length < charactersData.morties.length
-        ? { name: "rick", page: charactersData.ricksPage }
-        : { name: "morty", page: charactersData.mortiesPage };
 
-    // Number of remaining cards that we need to add
-    numOfCards =
-      2 * numOfCards -
-      charactersData.ricks.length -
-      charactersData.morties.length;
-    // select a different page than the last one
-    const newPage = Math.floor(Math.random() * (cardsToAddData.page - 1)) + 1;
-
-    return httpReq(
-      buildURL(`page=${newPage}&name=${cardsToAddData.name}`),
-      numOfCards
-    ).then((data) => data.cards);
-  }
   // Else there's an initial request for ricks and morties cards;
-  return getLastLevelCards(level);
+  let numOfCards =
+    level.val === LEVELS - 1 ? LEVEL_FIVE_CARDS / 2 : LEVEL_SIX_CARDS / 2;
+  return getRicksAndMortiesCards(numOfCards, level);
 };
 
-export const getLastLevelCards = (level) => {
-  let numOfCards = (level.val * CARDS_TO_ADD - 2) / 2,
-    ricksAndMorties = [];
+export const getRicksAndMortiesCards = (numOfCards, pages) => {
+  let ricksAndMorties = [],
+    totalNumOfCards = numOfCards * 2;
 
   return Promise.all([
-    httpReq(buildURL("name=rick"), numOfCards),
-    httpReq(buildURL("name=morty"), numOfCards),
+    httpReq(
+      buildURL(`${pages ? `page=${pages[0]}&` : ""}name=rick`),
+      numOfCards
+    ),
+    httpReq(
+      buildURL(`${pages ? `page=${pages[1]}&` : ""}name=morty`),
+      numOfCards
+    ),
   ]).then((results) => {
     let ricks = results[0].cards,
       morties = results[1].cards;
 
     ricksAndMorties = ricksAndMorties.concat(ricks).concat(morties);
-    // If the page was the last one then this will be true
-    // since there will not be enough cards in that page
-    if (ricksAndMorties.length < numOfCards * 2) {
-      return getCards(level, 0, {
-        charactersData: {
-          ricks,
-          morties,
-          ricksPage: results[0].page,
-          mortiesPage: results[1].page,
-        },
-        numOfCards,
-      })
+
+    if (ricksAndMorties.length > totalNumOfCards) {
+      ricksAndMorties = ricksAndMorties.slice(
+        0,
+        ricksAndMorties.length - totalNumOfCards
+      );
+    }
+    // If one of the page was the last one then this will be true
+    // since there will not be enough cards in these page
+    else if (ricksAndMorties.length < totalNumOfCards) {
+      let ricksPage = randomNumber(1, results[0].pages, results[0].page);
+      let mortiesPage = randomNumber(1, results[1].pages, results[1].page);
+
+      numOfCards = Math.ceil((numOfCards - ricksAndMorties.length) / 2);
+
+      return getRicksAndMortiesCards(numOfCards, [ricksPage, mortiesPage])
         .then((cards) => {
           return ricksAndMorties.concat(cards);
         })
