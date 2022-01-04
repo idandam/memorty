@@ -1,7 +1,7 @@
 .dialog {
+  min-width: 60rem;
   display: grid;
   grid-template-columns: 1fr;
-  min-width: 60rem;
   border-radius: 10px;
   border: 1px solid #ccc;
   box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.1);
