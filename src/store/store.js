@@ -14,7 +14,7 @@ const initialState = {
   clicked: {},
   currScore: 0,
   bestScore: 0,
-  level: { val: 6 },
+  level: { val: 1 },
   isWin: false,
   isLose: false,
 };
