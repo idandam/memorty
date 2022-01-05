@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   gap: 1.2rem;
-  width: 11.2rem;
+  max-width: 14.2rem;
   padding-bottom: 0.8rem;
   font-size: 1.6rem;
   text-align: center;
@@ -12,6 +12,10 @@
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s;
+}
+
+.card-box__level-6 {
+  max-width: 11.2rem;
 }
 
 .card-box:hover:not(.default-cursor) {

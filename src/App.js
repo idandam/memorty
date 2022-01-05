@@ -10,6 +10,7 @@ import levelMaxScore from "./utils/nextLevelIndicator";
 import { LEVELS } from "./constants/constants";
 
 import "./App.css";
+import Error from "./components/UI/Error";
 
 const isWin = (level, currScore) => {
   return level === LEVELS && currScore === levelMaxScore(level) - 1;
@@ -36,7 +37,6 @@ function App() {
 
   return (
     <>
-      {error && <p>ERROR</p>}
       {!error && (
         <div className="container">
           <Header
@@ -75,6 +75,7 @@ function App() {
           <Footer />
         </div>
       )}
+      {error && <Error />}
     </>
   );
 }

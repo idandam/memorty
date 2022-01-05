@@ -16,7 +16,7 @@ const useHttp = () => {
     if (loading) {
       let tid = setTimeout(() => {
         setError(true);
-      }, 1000);
+      }, 8000);
 
       return () => {
         clearTimeout(tid);

@@ -1,3 +1,4 @@
+import { LEVELS } from "../../constants/constants";
 import styles from "./Card.module.css";
 
 const Card = (props) => {
@@ -6,7 +7,9 @@ const Card = (props) => {
       id={props.id}
       className={`${styles["card-box"]} ${
         props.isClicked ? styles.border : ""
-      } ${props.defaultCursor ? styles["default-cursor"] : ""}`}
+      } ${props.defaultCursor ? styles["default-cursor"] : ""} ${
+        props.level === LEVELS ? styles["card-box__level-6"] : ""
+      }`}
     >
       <img
         className={styles["card-image"]}

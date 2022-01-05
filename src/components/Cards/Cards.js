@@ -22,6 +22,7 @@ const Cards = (props) => {
           id={card.id}
           name={card.name}
           src={card.image}
+          level={props.level}
           isClicked={
             props.notClicked && props.notClicked.includes(card.id + "")
           }
