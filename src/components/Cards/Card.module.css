@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   gap: 1.2rem;
-  max-width: 14.2rem;
+  max-width: 13.2rem;
   padding-bottom: 0.8rem;
   font-size: 1.6rem;
   text-align: center;
@@ -67,5 +67,22 @@
   100% {
     translatex: (0);
     box-shadow: 0 0 0.8rem 0.1rem #fa7c6d;
+  }
+}
+/* 720h */
+
+@media (max-width: 86em) {
+  .card-box {
+    max-width: 10.5rem;
+  }
+}
+@media (max-width: 54em) {
+  .card-box {
+    max-width: 9rem;
+  }
+  @media (max-width: 29em) {
+    .card-box {
+      max-width: 10rem;
+    }
   }
 }

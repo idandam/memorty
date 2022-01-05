@@ -38,115 +38,18 @@ img {
   }
 }
 
-/* 4k */
-@media (min-height: 86em) {
-  @media (max-width: 160em) {
-    html {
-      font-size: 120.25%;
-    }
-  }
-
-  @media (max-width: 145em) {
-    html {
-      font-size: 105.25%;
-    }
-  }
-
-  @media (max-width: 88em) {
-    html {
-      font-size: 91.25%;
-    }
-  }
-  @media (max-width: 63em) {
-    html {
-      font-size: 74.25%;
-    }
-  }
-}
-
-/* < 4k */
-
-@media (max-height: 41em) {
-  @media (max-width: 64em) {
-    html {
-      font-size: 50.25%;
-    }
-  }
-
-  @media (max-width: 41em) {
-    html {
-      font-size: 40.25%;
-    }
-  }
-
-  @media (max-width: 29em) {
-    html {
-      font-size: 23.25%;
-    }
-  }
-}
-
-@media (max-height: 31em) {
-  @media (max-width: 48em) {
-    html {
-      font-size: 37.25%;
-    }
-  }
-
-  @media (max-width: 32em) {
-    html {
-      font-size: 31.25%;
-    }
-  }
-
-  @media (max-width: 20em) {
-    html {
-      font-size: 26.25%;
-    }
-  }
-}
-
-@media (max-width: 91em) {
+@media (max-width: 67em) {
   html {
-    font-size: 48.25%;
+    font-size: 51%;
   }
 }
-
-@media (max-width: 65em) {
+@media (max-width: 38em) {
   html {
-    font-size: 39.25%;
-  }
-  @media (max-height: 31em) {
-    html {
-      font-size: 28.25%;
-    }
+    font-size: 47%;
   }
 }
-
-@media (max-width: 44em) {
+@media (max-width: 29em) {
   html {
-    font-size: 31.25%;
-  }
-  @media (max-height: 31em) {
-    html {
-      font-size: 23.25%;
-    }
-  }
-}
-
-@media (max-width: 25em) {
-  html {
-    font-size: 26.25%;
-  }
-  @media (max-height: 31em) {
-    html {
-      font-size: 21.25%;
-    }
-  }
-}
-
-@media (max-width: 18em) {
-  html {
-    font-size: 22.25%;
+    font-size: 41%;
   }
 }

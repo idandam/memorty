@@ -1,15 +1,14 @@
 .progress {
   display: flex;
   gap: 4.8rem;
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   grid-column: span 2;
   justify-self: center;
 }
 
-@media (max-height: 41rem) {
-  @media (max-width: 29rem) {
-    .progress {
-      font-size: 1.2rem;
-    }
+@media (max-width: 54em) {
+  .progress {
+    grid-column: 3/-1;
+    justify-self: end;
   }
 }

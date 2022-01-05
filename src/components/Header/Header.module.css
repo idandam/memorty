@@ -24,17 +24,17 @@ logo-font: #e6ebed
    */
   width: 100%;
   background-image: linear-gradient(to top right, #01313f, #1a4a59);
-  font-size: 2.4rem;
+  font-size: 1.8rem;
 }
 
 .logo-box {
   display: flex;
-  gap: 1.6rem;
+  gap: 1.2rem;
   align-items: center;
   justify-self: start;
 }
 .logo {
-  height: 5.5rem;
+  height: 5rem;
 }
 
 .logo-text {
@@ -51,13 +51,28 @@ logo-font: #e6ebed
   color: #e6ebed;
 }
 
-@media (max-height: 41rem) {
-  @media (max-width: 29rem) {
-    .header {
+@media (max-width: 29em) {
+  .header {
+    font-size: 1.4rem;
+  }
+  .logo {
+    height: 3rem;
+  }
+  @media (max-height: 46em) {
+    .progress {
       font-size: 1.8rem;
     }
-    .logo {
-      height: 4rem;
-    }
+  }
+  .header {
+    font-size: 1.8rem;
+  }
+  .logo {
+    height: 4rem;
+  }
+}
+
+@media (max-width: 24em) {
+  .logo {
+    height: 5rem;
   }
 }
