@@ -17,12 +17,15 @@
 .card-box__level-6 {
   max-width: 10rem;
 }
-
-.card-box:hover:not(.default-cursor) {
-  transform: translateY(-0.7rem) scale(1.03);
-  box-shadow: 0 1.8rem 4rem rgba(0, 0, 0, 0.15);
+/* Apply this only if the browser supports proper/true/real/non-emulated hovering,
+otherwise if the user has only a touch screen, then the animation will remains
+on the element after the user will perfoc a touch action on it*/
+@media (hover: hover) {
+  .card-box:hover:not(.default-cursor) {
+    transform: translateY(-0.7rem) scale(1.03);
+    box-shadow: 0 1.8rem 4rem rgba(0, 0, 0, 0.15);
+  }
 }
-
 .card-image {
   width: 100%;
 }
