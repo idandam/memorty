@@ -12,3 +12,25 @@
     justify-self: end;
   }
 }
+@media (max-width: 67em) and (max-height: 38em) {
+  .progress {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 29em) and (max-height: 32em) {
+  .progress {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 24em) and (min-height: 37em) {
+  .progress {
+    font-size: 2.2rem;
+  }
+}
+@media (max-width: 26em) and (min-height: 45em) {
+  .progress {
+    font-size: 2.4rem;
+  }
+}

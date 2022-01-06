@@ -43,6 +43,12 @@ img {
     font-size: 51%;
   }
 }
+
+@media (max-width: 67em) and (max-height: 38em) {
+  html {
+    font-size: 41%;
+  }
+}
 @media (max-width: 38em) {
   html {
     font-size: 47%;
@@ -51,5 +57,40 @@ img {
 @media (max-width: 29em) {
   html {
     font-size: 41%;
+  }
+}
+
+@media (max-width: 29em) and (max-height: 32em) {
+  html {
+    font-size: 28%;
+  }
+}
+
+@media (max-width: 21em) and (max-height: 32em) {
+  html {
+    font-size: 26%;
+  }
+}
+
+@media (max-width: 24em) and (min-height: 37em) {
+  html {
+    font-size: 32%;
+  }
+}
+
+@media (max-width: 26em) and (min-height: 45em) {
+  html {
+    font-size: 35.5%;
+  }
+}
+
+@media (max-width: 26em) and (min-height: 49em) {
+  html {
+    font-size: 32.5%;
+  }
+}
+@media (max-width: 86em) and (min-height: 43em) {
+  html {
+    font-size: 82%;
   }
 }
