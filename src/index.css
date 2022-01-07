@@ -94,3 +94,35 @@ img {
     font-size: 82%;
   }
 }
+
+@media (max-width: 86em) and (min-height: 43em) {
+  html {
+    font-size: 82%;
+  }
+}
+
+@media (max-width: 64em) and (min-height: 43em) {
+  html {
+    font-size: 61%;
+  }
+}
+
+@media (max-width: 48em) and (min-height: 43em) {
+  html {
+    font-size: 54%;
+  }
+}
+
+@media (max-width: 25em) and (min-height: 52em) {
+  html {
+    font-size: 43%;
+  }
+}
+@media (max-width: 27em) and (min-height: 56em) {
+  html {
+    font-size: 49%;
+  }
+}
+
+@media (max-width: 27em) and (min-height: 56em) {
+}

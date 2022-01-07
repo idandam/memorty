@@ -104,3 +104,18 @@ on the element after the user will perfoc a touch action on it*/
     font-size: 1.4rem;
   }
 }
+
+@media (max-width: 25em) and (min-height: 52em) {
+  .card-box {
+    max-width: 11rem;
+  }
+  .card-box__level-6 {
+    max-width: 7.4rem;
+  }
+}
+
+@media (max-width: 27em) and (min-height: 56em) {
+  .card-box__level-6 {
+    max-width: 6rem;
+  }
+}

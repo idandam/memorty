@@ -31,6 +31,13 @@
 }
 @media (max-width: 26em) and (min-height: 45em) {
   .progress {
-    font-size: 2.4rem;
+    font-size: 1.8rem;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 25em) and (min-height: 52em) {
+  .progress {
+    font-size: 1.8rem;
   }
 }
