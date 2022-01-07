@@ -11,7 +11,7 @@ const Header = (props) => {
         <p className={styles["logo-text"]}>Memorty</p>
       </div>
       {props.isLose && (
-        <NewGameButton onClick={props.onNewGame} isAbsolute={true}>
+        <NewGameButton onClick={props.onMiss} isAbsolute={true}>
           TRY AGAIN
         </NewGameButton>
       )}

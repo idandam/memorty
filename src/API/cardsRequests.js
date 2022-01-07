@@ -42,7 +42,7 @@ export const getCardModels = (characters, ids) => {
   return cards;
 };
 
-export const getCards = (level, characterCount, rickAndMortiesData) => {
+export const getCards = (level, characterCount) => {
   let characterIds;
   if (level.val < LEVELS - 1) {
     let numOfCards = level.val * CARDS_TO_ADD;
@@ -53,13 +53,16 @@ export const getCards = (level, characterCount, rickAndMortiesData) => {
   // Else there's an initial request for ricks and morties cards;
   let numOfCards =
     level.val === LEVELS - 1 ? LEVEL_FIVE_CARDS / 2 : LEVEL_SIX_CARDS / 2;
-  return getRicksAndMortiesCards(numOfCards, level);
+  return getRicksAndMortiesCards(numOfCards);
 };
 
 export const getRicksAndMortiesCards = (numOfCards, pages) => {
   let ricksAndMorties = [],
     totalNumOfCards = numOfCards * 2;
 
+  let url = buildURL(`${pages ? `page=${pages[0]}&` : ""}name=rick`);
+  if (url) {
+  }
   return Promise.all([
     httpReq(
       buildURL(`${pages ? `page=${pages[0]}&` : ""}name=rick`),
@@ -82,12 +85,12 @@ export const getRicksAndMortiesCards = (numOfCards, pages) => {
       );
     }
     // If one of the page was the last one then this will be true
-    // since there will not be enough cards in these page
+    // since there will not be enough cards in these pages
     else if (ricksAndMorties.length < totalNumOfCards) {
-      let ricksPage = randomNumber(1, results[0].pages, results[0].page);
-      let mortiesPage = randomNumber(1, results[1].pages, results[1].page);
+      let ricksPage = randomNumber(1, results[0].pages, +results[0].page);
+      let mortiesPage = randomNumber(1, results[1].pages, +results[1].page);
 
-      numOfCards = Math.ceil((numOfCards - ricksAndMorties.length) / 2);
+      numOfCards = Math.ceil((totalNumOfCards - ricksAndMorties.length) / 2);
 
       return getRicksAndMortiesCards(numOfCards, [ricksPage, mortiesPage])
         .then((cards) => {

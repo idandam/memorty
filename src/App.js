@@ -5,16 +5,10 @@ import Dialog from "./components/UI/Dialog";
 
 import useHttp from "./hooks/useHttp";
 
-import levelMaxScore from "./utils/nextLevelIndicator";
-
-import { LEVELS } from "./constants/constants";
+import isWin from "./utils/isWin";
 
 import "./App.css";
 import Error from "./components/UI/Error";
-
-const isWin = (level, currScore) => {
-  return level === LEVELS && currScore === levelMaxScore(level) - 1;
-};
 
 function App() {
   const { error, state, loading, dispatch } = useHttp();
@@ -31,8 +25,8 @@ function App() {
     }
   };
 
-  const newGameHandler = () => {
-    dispatch({ type: "NEW_GAME" });
+  const downgradeLevel = () => {
+    dispatch({ type: "DOWNGRADE_LEVEL" });
   };
 
   return (
@@ -44,7 +38,7 @@ function App() {
             level={state.level.val}
             bestScore={state.bestScore}
             isLose={state.isLose}
-            onNewGame={newGameHandler}
+            onMiss={downgradeLevel}
           />
           {!loading && !state.isWin && !state.isLose && (
             <Cards
@@ -69,7 +63,7 @@ function App() {
               title="Great job!"
               body={<>I hoped you enjoyed the game</>}
               actionText="PLAY AGAIN"
-              onNewGame={newGameHandler}
+              onWin={downgradeLevel}
             />
           )}
           <Footer />

@@ -23,10 +23,10 @@ const Cards = (props) => {
           name={card.name}
           src={card.image}
           level={props.level}
-          isClicked={
+          isNotClicked={
             props.notClicked && props.notClicked.includes(card.id + "")
           }
-          defaultCursor={props.notClicked}
+          isDefaultCursor={props.notClicked}
         />
       ))}
     </div>

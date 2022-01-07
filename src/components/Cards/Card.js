@@ -6,8 +6,8 @@ const Card = (props) => {
     <figure
       id={props.id}
       className={`${styles["card-box"]} ${
-        props.isClicked ? styles.border : ""
-      } ${props.defaultCursor ? styles["default-cursor"] : ""} ${
+        props.isNotClicked ? styles.border : ""
+      } ${props.isDefaultCursor ? styles["default-cursor"] : ""} ${
         props.level === LEVELS ? styles["card-box__level-6"] : ""
       }`}
     >
