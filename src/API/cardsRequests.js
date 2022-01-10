@@ -46,6 +46,9 @@ export const getCards = (level, characterCount) => {
   let characterIds;
   if (level.val < LEVELS - 1) {
     let numOfCards = level.val * CARDS_TO_ADD;
+    if (level.val === 1 && numOfCards < 4) {
+      numOfCards = 4;
+    }
     characterIds = uniqueNumbers(numOfCards, characterCount);
     return httpReq(buildURL(`${characterIds.join(",")}`), numOfCards);
   }
