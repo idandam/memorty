@@ -61,7 +61,7 @@ function App() {
           {state.isWin && (
             <Dialog
               title="Great job!"
-              body={<>I hoped you enjoyed the game</>}
+              body={<>I hope you enjoyed the game</>}
               actionText="PLAY AGAIN"
               onWin={downgradeLevel}
             />

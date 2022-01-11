@@ -2,9 +2,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 0.8rem;
   width: 100%;
   padding: 1.2rem;
   font-size: 1.2rem;
   color: #e6ebed;
   background-image: linear-gradient(to bottom left, #01313f, #1a4a59);
+}
+
+.github-logo {
+  height: 1.8rem;
+  fill: #fff;
+  transition: all 0.3s linear;
+}
+
+.github-logo:hover {
+  transform: rotate(360deg);
 }

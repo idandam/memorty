@@ -11,7 +11,7 @@ const Dialog = (props) => {
         <p>{props.body}</p>
       </div>
       <footer className={styles.footer}>
-        <NewGameButton onClick={props.onNewGame}>PLAY AGAIN</NewGameButton>
+        <NewGameButton onClick={props.onWin}>PLAY AGAIN</NewGameButton>
       </footer>
     </div>
   );
