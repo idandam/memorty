@@ -32,7 +32,7 @@ function App() {
   return (
     <>
       {!error && (
-        <div className="container">
+        <main className="container">
           <Header
             currScore={state.currScore}
             level={state.level.val}
@@ -67,7 +67,7 @@ function App() {
             />
           )}
           <Footer />
-        </div>
+        </main>
       )}
       {error && <Error />}
     </>
