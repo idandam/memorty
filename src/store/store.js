@@ -1,7 +1,6 @@
 import shuffle from "../utils/shuffle";
 import { LEVELS } from "../constants/constants";
 import levelMaxScore from "../utils/levelMaxScore";
-import nextLevelIndicator from "../utils/levelMaxScore";
 
 const resetClicks = (cards) => {
   let clicked = {};
@@ -65,8 +64,7 @@ const reducer = (prevState, action) => {
 
     case "DOWNGRADE_LEVEL":
       level = isWin || level.val === 1 ? { val: 1 } : { val: level.val - 1 };
-      currScore =
-        isWin || level.val === 1 ? 0 : nextLevelIndicator(level.val - 1);
+      currScore = isWin || level.val === 1 ? 0 : levelMaxScore(level.val - 1);
       isWin = isLose = false;
       break;
 
