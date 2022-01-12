@@ -3,7 +3,7 @@ import styles from "./Footer.module.css";
 const Footer = () => {
   return (
     <footer className={styles.footer}>
-      <p>Copyright &copy; 2021 Idan Damri</p>
+      <p>Copyright &copy; 2022 Idan Damri</p>
       <a
         href="https://github.com/idandam/memorty"
         target="_blank"
