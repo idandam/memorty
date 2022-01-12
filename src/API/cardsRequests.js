@@ -63,9 +63,6 @@ export const getRicksAndMortiesCards = (numOfCards, pages) => {
   let ricksAndMorties = [],
     totalNumOfCards = numOfCards * 2;
 
-  let url = buildURL(`${pages ? `page=${pages[0]}&` : ""}name=rick`);
-  if (url) {
-  }
   return Promise.all([
     httpReq(
       buildURL(`${pages ? `page=${pages[0]}&` : ""}name=rick`),
